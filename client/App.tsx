@@ -1,17 +1,31 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { AppContainer } from './src/styles/AppStyles';
-import { Text } from 'react-native';
+import React, { FC } from "react";
+import AppLoading from 'expo-app-loading';
 
-export default function App() {
+import { AppWrapperView } from './src/styles/AppStyles';
+import { useFonts, Inter_500Medium, Inter_400Regular } from '@expo-google-fonts/inter';
+
+import AuthNavigator from "./src/navigators/AuthNavigator";
+
   
-  return (
-    <AppContainer>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </AppContainer>
-  );
-}
 
+const App: FC = () => {
 
+  let [fontsLoaded] = useFonts({
+    Inter_500Medium,
+    Inter_400Regular
 
+  });
+
+  if (!fontsLoaded) {
+    return <AppLoading />
+  } else {
+    return (
+      <AppWrapperView >
+        <AuthNavigator />
+      </AppWrapperView>
+    );
+  }
+  
+};
+
+export default App;
