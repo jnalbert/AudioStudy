@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Button, Text, View, Image, StyleSheet } from 'react-native';
 import { Primary } from '../../shared/color';
 import { ScreenWrapper, ScreenBackgroundColor } from '../../shared/sharedStyles';
-import { CenterWrapper, Header3, HeaderImage, ImageWrapper, Header2Light, ImageWrapper2, Header3Second, AuthButtonsWrapper } from '../../styles/authStyles/IntroScreenStyles';
+import { Header3, HeaderImage, ImageWrapper, Header2Light, ImageWrapper2, Header3Second, AuthButtonsWrapper } from '../../styles/authStyles/IntroScreenStyles';
 import BasicButton from "../../shared/BasicButton"
 
 
@@ -24,7 +24,6 @@ const IntroScreen: FC<IntroScreenProps> = ({ navigation }) => {
   return (
     <ScreenBackgroundColor>
      <ScreenWrapper>
-      <CenterWrapper>
         <ImageWrapper>
           <HeaderImage style={ styles.image} resizeMethod="resize" source={ require("../../../assets/FullLogo.png")}/>
         </ImageWrapper>
@@ -44,11 +43,10 @@ const IntroScreen: FC<IntroScreenProps> = ({ navigation }) => {
 
         <AuthButtonsWrapper>
 
-          <BasicButton onPress={() => navigation.navigate("Sign Up", {name: "Justin Albert"})} title="Sign Up" />
-            <BasicButton onPress={() => navigation.navigate("Login", { name: "Justin Albert" })} title="Login" />
+          <BasicButton onPress={() => navigation.navigate("Sign Up")} title="Sign Up" />
+            <BasicButton onPress={() => navigation.navigate("Login")} title="Login" />
             
         </AuthButtonsWrapper>
-      </CenterWrapper>
       </ScreenWrapper>
     </ScreenBackgroundColor>
     

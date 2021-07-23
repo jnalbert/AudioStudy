@@ -2,13 +2,6 @@ import styled from "styled-components/native"
 import { Text400, Text500 } from '../../shared/color';
 
 
-export const CenterWrapper = styled.View`
-  flex: 1;
-  flex-direction: column;
-  align-items: center;
-  
-  
-`
 export const HeaderImage = styled.Image`
   height: 115px;
   

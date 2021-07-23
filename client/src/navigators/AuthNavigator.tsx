@@ -8,6 +8,7 @@ import LoginScreen from "../screens/auth/LoginScreen";
 import StackHeader from "../shared/StackHeader/StackHeader";
 import { backgroundColor } from "../shared/color";
 import StackHeaderBackButton from "../shared/StackHeader/StackHeaderBackButton";
+import SignUpScreen from '../screens/auth/SignUpScreen';
 
 
 
@@ -29,18 +30,20 @@ const AuthNavigator: FC = () => {
             name="Intro"
             component={IntroScreen}
             options={{ headerTitle: () => <StackHeader name="Intro" />, headerShown: false }}
-          />
+        />
+        <Stack.Screen
+            name="Sign Up"
+            component={SignUpScreen}
+            options={{ headerTitle: () => <StackHeader name="Sign Up" /> }}
+        />
+        
           <Stack.Screen
             name="Login"
             component={LoginScreen}
             options={{ headerTitle: () => <StackHeader name="Login" /> }}
         />
         
-        <Stack.Screen
-            name="Sign Up"
-            component={LoginScreen}
-            options={{ headerTitle: () => <StackHeader name="Sign Up" /> }}
-          />
+        
         </Stack.Navigator>
       </NavigationContainer>
       );
