@@ -1,10 +1,11 @@
 import React, { FC } from 'react';
 import { View } from 'react-native';
 import styled from "styled-components/native"
-import { ScreenBackgroundColor, ScreenWrapper } from '../../shared/sharedStyles';
+
 import StyledTextInput from '../../components/Inputs/StyledTextInput';
 import { useForm} from "react-hook-form";
 import BasicButton from '../../shared/BasicButton';
+import ScreenWrapperComp from '../../shared/ScreenWrapperComp';
 
 const InputWrapper = styled.View`
   padding-top: 50px
@@ -31,8 +32,9 @@ const SignUpScreen: FC = () => {
   }
 
   return (
-    <ScreenBackgroundColor>
-      <ScreenWrapper>
+    <ScreenWrapperComp>
+
+   
 
         <InputWrapper>
           <StyledTextInput hideText={false} error={errors.name} rules={{required: "This field is required"}} control={ control} placeHolderText="Name" name="name"/>
@@ -46,8 +48,7 @@ const SignUpScreen: FC = () => {
 
         
         
-      </ScreenWrapper>
-    </ScreenBackgroundColor>
+    </ScreenWrapperComp>
   )
 }
 

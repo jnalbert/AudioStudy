@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import { Button, Text, View, Image, StyleSheet } from 'react-native';
 import { Primary } from '../../shared/color';
-import { ScreenWrapper, ScreenBackgroundColor } from '../../shared/sharedStyles';
 import { Header3, HeaderImage, ImageWrapper, Header2Light, ImageWrapper2, Header3Second, AuthButtonsWrapper } from '../../styles/authStyles/IntroScreenStyles';
 import BasicButton from "../../shared/BasicButton"
+import ScreenWrapperComp from '../../shared/ScreenWrapperComp';
 
 
 interface IntroScreenProps {
@@ -22,8 +22,7 @@ const IntroScreen: FC<IntroScreenProps> = ({ navigation }) => {
 
   
   return (
-    <ScreenBackgroundColor>
-     <ScreenWrapper>
+    <ScreenWrapperComp>
         <ImageWrapper>
           <HeaderImage style={ styles.image} resizeMethod="resize" source={ require("../../../assets/FullLogo.png")}/>
         </ImageWrapper>
@@ -47,8 +46,7 @@ const IntroScreen: FC<IntroScreenProps> = ({ navigation }) => {
             <BasicButton onPress={() => navigation.navigate("Login")} title="Login" />
             
         </AuthButtonsWrapper>
-      </ScreenWrapper>
-    </ScreenBackgroundColor>
+      </ScreenWrapperComp>
     
   )
 }
