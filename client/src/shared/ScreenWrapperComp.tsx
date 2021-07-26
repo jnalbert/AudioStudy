@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import styled from "styled-components/native"
 import { backgroundColor } from './color';
 
-export const ScreenWrapper = styled.View`
+const ScreenWrapper = styled.View`
   flex: 1;
   background-color: ${backgroundColor};
   flex-direction: column;
@@ -12,7 +12,7 @@ export const ScreenWrapper = styled.View`
 `
 
 
-export const ScreenBackgroundColor = styled.View`
+const ScreenBackgroundColor = styled.View`
   background-color: ${backgroundColor};
   flex: 1;
 `
