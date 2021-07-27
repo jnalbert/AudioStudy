@@ -1,17 +1,15 @@
 import React, { FC, useEffect,
   useReducer,
   useMemo, } from "react";
-import AppLoading from "expo-app-loading";
-
-import { AppWrapperView } from "./src/styles/AppStyles";
 import {
   useFonts,
   Inter_500Medium,
   Inter_400Regular,
 } from "@expo-google-fonts/inter";
+import AppLoading from "expo-app-loading";
 
 import AuthNavigator from "./src/navigators/AuthNavigator";
-
+import { AppWrapperView } from "./src/styles/AppStyles";
 import { AuthContext, authReducer, getTokenAsync, AuthTypes, useMemoFunction, AuthContextFunctionTypes } from "./src/AppContext";
 import { View, Text } from "react-native";
 

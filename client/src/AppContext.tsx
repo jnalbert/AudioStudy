@@ -37,9 +37,20 @@ const defaultContextValue = {
   }
 }
 
+export enum actions {
+  restoreToken = "RESTORE_TOKEN",
+  signIn = "SIGN_IN",
+  signOut = "SIGN_OUT"
+}
+
+interface actionType {
+  type: actions,
+  token: string | null
+}
+
 export const AuthContext = createContext<AuthContextFunctionTypes>(defaultContextValue);
 
-export const authReducer = (prevState: any, action: any) => {
+export const authReducer = (prevState: AuthTypes, action: actionType) => {
   switch (action.type) {
     case "RESTORE_TOKEN":
       return {
@@ -59,6 +70,10 @@ export const authReducer = (prevState: any, action: any) => {
         isSignout: true,
         userToken: null,
       };
+    default:
+      return {
+        ...prevState
+      }
   }
 }
 

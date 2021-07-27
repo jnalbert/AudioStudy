@@ -37,8 +37,6 @@ const SignUpScreen: FC = () => {
   return (
     <ScreenWrapperComp>
 
-   
-
         <InputWrapper>
           <StyledTextInput hideText={false} error={errors.name} rules={{required: "This field is required"}} control={ control} placeHolderText="Name" name="name"/>
           <StyledTextInput hideText={false} error={errors.email} rules={{required: "This field is required", pattern:{value: emailRegExp, message: "Not a valid email"}}} control={ control} placeHolderText="Email" name="email" />
@@ -49,8 +47,6 @@ const SignUpScreen: FC = () => {
           <BasicButton title="Sign Up" onPress={handleSubmit(onSubmit)}/>
         </ButtonWrapper>
 
-        
-        
     </ScreenWrapperComp>
   )
 }
