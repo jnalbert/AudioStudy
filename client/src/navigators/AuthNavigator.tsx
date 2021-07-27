@@ -1,5 +1,4 @@
 import React, { FC } from "react";
-import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import IntroScreen from "../screens/auth/IntroScreen";
@@ -20,7 +19,7 @@ const Stack = createStackNavigator();
 
 const AuthNavigator: FC = () => {
   return (
-      <NavigationContainer>
+      
         <Stack.Navigator screenOptions={{
           headerStyle: { backgroundColor: backgroundColor, borderBottomColor: backgroundColor, shadowColor: 'transparent' },
           headerBackImage: () => { return <StackHeaderBackButton /> },
@@ -45,7 +44,6 @@ const AuthNavigator: FC = () => {
         
         
         </Stack.Navigator>
-      </NavigationContainer>
       );
   
 };

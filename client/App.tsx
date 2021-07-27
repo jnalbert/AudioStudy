@@ -9,9 +9,11 @@ import {
 import AppLoading from "expo-app-loading";
 
 import AuthNavigator from "./src/navigators/AuthNavigator";
+import { NavigationContainer } from "@react-navigation/native";
 import { AppWrapperView } from "./src/styles/AppStyles";
 import { AuthContext, authReducer, getTokenAsync, AuthTypes, useMemoFunction, AuthContextFunctionTypes } from "./src/AppContext";
 import { View, Text } from "react-native";
+import MainNavigator from "./src/navigators/MainNavigator";
 
 const App: FC<any> = ({ navigation }) => {
   const [state, dispatch]: [AuthTypes, React.Dispatch<any>] = useReducer(
@@ -37,6 +39,7 @@ const App: FC<any> = ({ navigation }) => {
   
   return (
     <AuthContext.Provider value={authContext}>
+      <NavigationContainer>
       {(!fontsLoaded || state.isLoading) ? (
         <AppLoading />
       ) : (
@@ -44,12 +47,11 @@ const App: FC<any> = ({ navigation }) => {
           {state?.userToken === null ? (
             <AuthNavigator />
           ) : (
-            <View>
-              <Text>Home Screen</Text>
-            </View>
+            <MainNavigator />
           )}
         </AppWrapperView>
-      )}
+        )}
+      </NavigationContainer>
     </AuthContext.Provider>
   );
 };
