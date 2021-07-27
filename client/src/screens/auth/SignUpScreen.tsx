@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import { View } from 'react-native';
 import styled from "styled-components/native"
 
@@ -6,6 +6,7 @@ import StyledTextInput from '../../components/Inputs/StyledTextInput';
 import { useForm} from "react-hook-form";
 import BasicButton from '../../shared/BasicButton';
 import ScreenWrapperComp from '../../shared/ScreenWrapperComp';
+import { AuthContext } from '../../AppContext';
 
 const InputWrapper = styled.View`
   padding-top: 50px
@@ -15,7 +16,7 @@ const ButtonWrapper = styled.View`
   padding-top: 80px;
 `
 
-interface SignUpFormProps {
+export interface SignUpFormProps {
   name: string;
   email: string;
   password: string;
@@ -25,10 +26,12 @@ const emailRegExp = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|
 
 
 const SignUpScreen: FC = () => {
+  const { signUp } = React.useContext(AuthContext);
+  
   const { control, handleSubmit, formState: { errors } } = useForm<SignUpFormProps>();
 
   const onSubmit = (data: SignUpFormProps) => {
-    console.log(data)
+    signUp(data)
   }
 
   return (

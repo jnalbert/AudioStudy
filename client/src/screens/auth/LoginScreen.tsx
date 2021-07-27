@@ -7,6 +7,7 @@ import StyledTextInput from "../../components/Inputs/StyledTextInput";
 import { useForm } from "react-hook-form";
 import BasicButton from "../../shared/BasicButton";
 import { Primary } from "../../shared/color";
+import { AuthContext } from '../../AppContext';
 
 const InputWrapper = styled.View`
   padding-top: 50px;
@@ -26,12 +27,14 @@ const ForgotPasswordWrapper = styled.TouchableOpacity`
   padding-top: 4px;
 `
 
-interface LoginFormProps {
+export interface LoginFormProps {
   email: string;
   password: string;
 }
 
 const LoginScreen: FC = () => {
+  const { signIn } = React.useContext(AuthContext);
+  
   const {
     control,
     handleSubmit,
@@ -39,7 +42,7 @@ const LoginScreen: FC = () => {
   } = useForm<LoginFormProps>();
 
   const onSubmit = (data: LoginFormProps) => {
-    console.log(data);
+    signIn(data)
   };
 
   const forgotPassword = () => {
