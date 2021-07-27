@@ -1,11 +1,13 @@
 import React, { FC } from 'react';
 import { View, Text } from 'react-native';
+import TabNavHeader from '../../components/TabNavHeader';
+import ScreenWrapperComp from '../../shared/ScreenWrapperComp';
 
 const SettingsScreen: FC = () => {
   return (
-    <View style={{flex: 1}}>
-      <Text>Settings</Text>
-    </View>
+    <ScreenWrapperComp>
+      <TabNavHeader  title="Settings"/>
+    </ScreenWrapperComp>
   )
 }
 
