@@ -7,8 +7,8 @@ import SettingsScreen from "../screens/main/SettingsScreen";
 
 // Icons
 import { MaterialIcons } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons'; 
+import { Entypo } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons'; 
 import { Primary, Text500 } from '../shared/color';
 
 const Tab = createBottomTabNavigator();
@@ -22,10 +22,10 @@ const MainNavigator: FC = () => {
           if (route.name === "AudioFiles") {
             return <MaterialIcons name="library-music" size={30} color={color} />
           } else if (route.name === "CreateAudioFile") {
-            return <MaterialCommunityIcons name="plus-circle-outline" size={30} color={color} />
+            return <Entypo name="circle-with-plus" size={30} color={color} />
           }
           
-          return <AntDesign name="user" size={30} color={color} />
+          return <FontAwesome5 name="user-alt" size={30} color={color} />
 
         },
       })}
