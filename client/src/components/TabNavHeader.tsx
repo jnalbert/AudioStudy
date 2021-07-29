@@ -5,7 +5,7 @@ import { Text500 } from '../shared/color';
 
 
 const HeaderWrapper = styled.View`
-  padding-top: 60px;
+  padding-top: 63px;
   height: 88px;
   justify-content: center;
 `
