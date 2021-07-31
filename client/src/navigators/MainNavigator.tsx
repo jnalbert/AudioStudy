@@ -20,12 +20,12 @@ const MainNavigator: FC = () => {
         tabBarIcon: ({color}) => {
 
           if (route.name === "AudioFiles") {
-            return <MaterialIcons name="library-music" size={30} color={color} />
+            return <MaterialIcons name="library-music" size={28} color={color} />
           } else if (route.name === "CreateAudioFile") {
-            return <Entypo name="circle-with-plus" size={30} color={color} />
+            return <Entypo name="circle-with-plus" size={28} color={color} />
           }
           
-          return <FontAwesome5 name="user-alt" size={30} color={color} />
+          return <FontAwesome5 name="user-alt" size={28} color={color} />
 
         },
       })}

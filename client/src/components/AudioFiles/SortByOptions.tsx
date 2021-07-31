@@ -18,6 +18,7 @@ const SortOptionsWrapper = styled.View`
 `
 
 const SortByOptions: FC = () => {
+  
   // make show menu
   const showMenu = () => {
 

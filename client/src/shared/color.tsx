@@ -2,6 +2,8 @@ export const backgroundColor = "#fffffffe"
 
 export const Text100 = "#F8FAFD"
 
+export const Text200 = "#E7ECF3"
+
 export const Text300 = "#A7B0C0";
 
 export const Text400 = "#5D6470";
