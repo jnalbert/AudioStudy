@@ -216,12 +216,12 @@ const AudioFileSection: FC<AudioFileSectionProps> = ({ imgUrl, header, descripti
               </LengthText>
             </LeftContainer>
 
-              <RightContainer>
+              <RightContainer style={{paddingRight: 6}}>
                 <TouchableOpacity onPress={() => {
                   deleteItem();
                   deleteItemHandle(fileId)
                 }}>
-                  <FontAwesome5 name="trash-alt" size={24} color={Secondary} />
+                  <FontAwesome5 name="trash-alt" size={20} color={Secondary} />
                 </TouchableOpacity>
             </RightContainer>
           </SideBySideWrapper>

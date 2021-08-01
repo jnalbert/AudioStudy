@@ -1,7 +1,6 @@
 import React, { FC, useState } from 'react';
 import { View, Text } from 'react-native';
 import styled from "styled-components/native"
-import TabNavHeader from '../../components/TabNavHeader';
 import ScreenWrapperComp from '../../shared/ScreenWrapperComp';
 import { backgroundGray, borderColor, Text300, Text100 } from '../../shared/color';
 import { AntDesign } from '@expo/vector-icons'; 
@@ -10,7 +9,7 @@ import AudioFileSection from '../../components/AudioFiles/AudioFileSection';
 
 const SearchBarWrapper = styled.View`
   width: 100%;
-  padding-top: 20px;
+  padding-top: 15px;
   flex-direction: row;
   align-items: center;
 `

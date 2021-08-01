@@ -1,8 +1,6 @@
 import React, { FC } from "react";
 import { View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import AudioFilesScreen from "../screens/main/AudioFilesScreen";
-import CreateAudioFileScreen from "../screens/main/CreateAudioFileScreen";
 import SettingsScreen from "../screens/main/SettingsScreen";
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
@@ -12,6 +10,8 @@ import { Entypo } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons'; 
 import { Primary, Text500 } from '../shared/color';
 import AudioFilesNavigator from "./AudioFilesNavigator";
+import CreateAudioFileNavigator from "./CreateAudioFileNavigator";
+import SettingsNavigator from "./SettingsNavigator";
 
 const displayTabs = (route: any) => {
   const routeName = getFocusedRouteNameFromRoute(route);
@@ -52,8 +52,8 @@ const MainNavigator: FC = () => {
       }}
     >
       <Tab.Screen name="AudioFiles" component={AudioFilesNavigator} />
-      <Tab.Screen name="CreateAudioFile" component={CreateAudioFileScreen} />
-      <Tab.Screen name="Settings" component={SettingsScreen} />
+      <Tab.Screen name="CreateAudioFile" component={CreateAudioFileNavigator} />
+      <Tab.Screen name="Settings" component={SettingsNavigator} />
     </Tab.Navigator>
   );
 };
