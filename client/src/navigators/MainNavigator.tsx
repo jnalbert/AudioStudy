@@ -10,6 +10,8 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Entypo } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons'; 
 import { Primary, Text500 } from '../shared/color';
+import AudioFilesNavigator from "./AudioFilesNavigator";
+
 
 const Tab = createBottomTabNavigator();
 
@@ -36,7 +38,7 @@ const MainNavigator: FC = () => {
         tabStyle: {paddingTop: 17}
       }}
     >
-      <Tab.Screen name="AudioFiles" component={AudioFilesScreen} />
+      <Tab.Screen name="AudioFiles" component={AudioFilesNavigator} />
       <Tab.Screen name="CreateAudioFile" component={CreateAudioFileScreen} />
       <Tab.Screen name="Settings" component={SettingsScreen} />
     </Tab.Navigator>

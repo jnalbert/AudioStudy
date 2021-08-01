@@ -3,6 +3,7 @@ import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import styled from "styled-components/native"
 import { Text300, Text500, Secondary, Text200 } from '../../shared/color';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 const OverallWrapper = styled.View`
   flex: 1;
@@ -121,13 +122,23 @@ interface AudioFileSectionProps {
   date: Date;
   fileId: string;
   deleteItemHandle: (id: string) => void;
+  navigation: any;
 }
 
-const AudioFileSection: FC<AudioFileSectionProps> = ({ imgUrl, header, description, length, date, fileId, deleteItemHandle }) => {
+const AudioFileSection: FC<AudioFileSectionProps> = ({ imgUrl, header, description, length, date, fileId, deleteItemHandle, navigation }) => {
+
 
   const [display, setDisplay] = useState(true);
 
   const handlePress = () => {
+ 
+    navigation.navigate('AudioFileListen', {
+        imgUrl: imgUrl,
+        header: header,
+        description: description,
+        length: length,
+        fileId: fileId
+    });
 
   }
   

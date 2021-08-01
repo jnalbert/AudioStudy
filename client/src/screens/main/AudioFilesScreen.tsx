@@ -52,7 +52,11 @@ interface AudioFileType {
   display: boolean;
 }
 
-const AudioFilesScreen: FC = () => {
+interface AudioFileScreenProps {
+  navigation: any;
+}
+
+const AudioFilesScreen: FC<AudioFileScreenProps> = ({navigation}) => {
 
   const initialAudioFiles = [{ imgUrl: "imageUrl", header: "French Revolution", description: "Text from history class relating", length: 53, date: new Date(), fileId: "23lnfklwns", display: true },
     { imgUrl: "imageUrl", header: "Checkh", description: "Text from history class relating", length: 83, date: new Date(), fileId: "lknsdflknklt5", display: true },
@@ -67,7 +71,7 @@ const AudioFilesScreen: FC = () => {
 
   const [audioFiles, setAudioFiles] = useState<AudioFileType[]>(initialAudioFiles)
 
-  const [rerenderState, setRerenderState] = useState(0);
+  const [reRenderState, setReRenderState] = useState(0);
 
 
   let searchText: string;
@@ -87,7 +91,7 @@ const AudioFilesScreen: FC = () => {
       return prevState
     })
 
-    setRerenderState(rerenderState + 1);
+    setReRenderState(reRenderState + 1);
   }
 
   const deleteItem = (id: string) => {
@@ -100,13 +104,13 @@ const AudioFilesScreen: FC = () => {
       }
       return prevState;
     })
-    setRerenderState(rerenderState + 1)
+    setReRenderState(reRenderState + 1)
   }
 
 
   return (
     <ScreenWrapperComp>
-      <TabNavHeader title="Audio Files" />
+       {/* <TabNavHeader title="Audio Files" /> */}
 
       <SearchBarWrapper>
         <SearchBar>
@@ -130,7 +134,7 @@ const AudioFilesScreen: FC = () => {
           {audioFiles.map(({imgUrl, header, description, length, date, fileId, display}: AudioFileType) => {
             if (display === false) return;
 
-            return <AudioFileSection key={fileId} imgUrl={imgUrl} header={header} description={description} length={length} date={date} fileId={fileId} deleteItemHandle={deleteItem}/>
+            return <AudioFileSection navigation={navigation} key={fileId} imgUrl={imgUrl} header={header} description={description} length={length} date={date} fileId={fileId} deleteItemHandle={deleteItem}/>
           })}
           
           
