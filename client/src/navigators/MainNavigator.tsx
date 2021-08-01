@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import AudioFilesScreen from "../screens/main/AudioFilesScreen";
 import CreateAudioFileScreen from "../screens/main/CreateAudioFileScreen";
 import SettingsScreen from "../screens/main/SettingsScreen";
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 // Icons
 import { MaterialIcons } from "@expo/vector-icons";
@@ -12,10 +13,21 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { Primary, Text500 } from '../shared/color';
 import AudioFilesNavigator from "./AudioFilesNavigator";
 
+const displayTabs = (route: any) => {
+  const routeName = getFocusedRouteNameFromRoute(route);
+
+  if (routeName === "AudioFileListen") return false;
+
+  return true;
+}
+
+
 
 const Tab = createBottomTabNavigator();
 
 const MainNavigator: FC = () => {
+
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -30,6 +42,7 @@ const MainNavigator: FC = () => {
           return <FontAwesome5 name="user-alt" size={28} color={color} />
 
         },
+        tabBarVisible: displayTabs(route)
       })}
       tabBarOptions={{
         activeTintColor: Primary,
