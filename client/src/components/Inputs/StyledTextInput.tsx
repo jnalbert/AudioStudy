@@ -14,7 +14,7 @@ import {
 } from "../../shared/color";
 
 const TextInputWrapper = styled.View`
- width: 327px;
+  width: 327px;
   height: 50px;
   margin: 10px 0px;
   padding-left: 16px;
@@ -30,11 +30,12 @@ const TextInputWrapper = styled.View`
 const TextInputWithStyles = styled.TextInput<{textSize: string}>`
   background-color: ${backgroundGray};
   font-family: "Inter_400Regular";
+  height: auto;
   flex: 1;
   font-size: ${props => props.textSize};
 `;
 
-const ErrorText = styled.Text`
+export const ErrorText = styled.Text`
   color: ${logoutRed};
   font-family: "Inter_400Regular";
   font-size: 16px;
@@ -47,6 +48,8 @@ interface StyledTextInputProps {
   name: string;
   error: any;
   hideText: boolean | undefined;
+  styles?: {};
+  otherOptions?: {};
 }
 
 const StyledTextInput: FC<StyledTextInputProps> = ({
@@ -55,7 +58,9 @@ const StyledTextInput: FC<StyledTextInputProps> = ({
   rules,
   name,
   error,
-  hideText
+  hideText,
+  styles,
+  otherOptions
 }) => {
 
   let temp: "12px" | "16px" = "16px"
@@ -94,8 +99,9 @@ const StyledTextInput: FC<StyledTextInputProps> = ({
           }
 
         return (
-          <TextInputWrapper>
+          <TextInputWrapper style={styles}>
             <TextInputWithStyles
+              {...otherOptions}
               placeholder={placeHolderText}
               placeholderTextColor={Text300}
               onBlur={onBlur}
