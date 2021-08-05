@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useState } from "react";
-import { ScrollView, Platform } from "react-native";
+import React, { FC, useEffect, useRef, useState } from "react";
+import { ScrollView, Platform, Text } from "react-native";
 import styled from "styled-components/native";
 import StyledTextInput from "../../components/Inputs/StyledTextInput";
 import ScreenWrapperComp from "../../shared/ScreenWrapperComp";
@@ -10,6 +10,7 @@ import OptionsDrawer from "../../components/Inputs/OptionsDrawer";
 import { ErrorText } from '../../components/Inputs/StyledTextInput';
 import { requestMediaLibraryPermissionsAsync, requestCameraPermissionsAsync, MediaTypeOptions, launchCameraAsync, ImagePickerOptions, launchImageLibraryAsync } from "expo-image-picker";
 import { ImageInfo } from "expo-image-picker/build/ImagePicker.types";
+import CreateAudioFileImage from "../../components/CreateAudioFile/CreateAudioFileImage";
 
 
 const ScrollViewWrapper = styled.ScrollView`
@@ -30,6 +31,19 @@ const InputLabel = styled.Text`
   padding-bottom: 2px;
 `
 
+const InputtedImagesScrollView = styled.ScrollView`
+  max-height: 385px;
+  padding: 8px 0px;
+`
+
+const InputtedImagesWrapper = styled.View`
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-width: 330px;
+  padding: 0px 14px;
+`
+
 interface CreateAudioFileFormTypes {
   header: string;
   description: string;
@@ -47,6 +61,10 @@ const CreateAudioFileScreen: FC = () => {
   const [error, setError] = useState<string | null>(null)
 
   const [images, setImages] = useState<imageType[]>([])
+
+  const [forceState, setForceState] = useState(0);
+
+
 
 
   const getUserPermissions = async () => {
@@ -93,6 +111,7 @@ const CreateAudioFileScreen: FC = () => {
     setDrawerOpen(false);
   }
 
+
   const cameraOptions: ImagePickerOptions = {
     mediaTypes: MediaTypeOptions.Images,
     allowsEditing: false,
@@ -106,6 +125,7 @@ const CreateAudioFileScreen: FC = () => {
     const result = await launchCameraAsync(cameraOptions)
     if (!result.cancelled) {
       setImages([...images, result])
+
     }
   }
   
@@ -113,8 +133,11 @@ const CreateAudioFileScreen: FC = () => {
     const result = await launchImageLibraryAsync(cameraOptions)
     if (!result.cancelled) {
       setImages([...images, result])
+ 
     }
   }
+
+
 
   const drawerOptions = [
     {
@@ -126,6 +149,20 @@ const CreateAudioFileScreen: FC = () => {
       action: choosePhoto
     }
   ]
+
+  const handleDelete = (imageId: string) => {
+    setImages((prevState) => {
+      for (let i = 0; i < prevState.length; i++) {
+        if (prevState[i].uri === imageId) {
+          prevState.splice(i, 1);
+          return prevState;
+        }
+      }
+      return prevState;
+    })
+
+    setForceState(forceState + 1);
+  }
 
   return (
     <>
@@ -166,6 +203,18 @@ const CreateAudioFileScreen: FC = () => {
           <BasicButton title="Add Photos" onPress={handleAddPhoto} />
           
           {error && <ErrorText>*{error}</ErrorText>}
+
+          <InputtedImagesScrollView >
+            <InputtedImagesWrapper>
+              {images.map(({ uri, base64 }: imageType) => {
+                if (base64) {
+                  return <CreateAudioFileImage forceState={forceState}key={uri} id={uri} imageData={base64} deleteImage={handleDelete}/>
+                }
+                
+              })}
+              
+            </InputtedImagesWrapper>
+          </InputtedImagesScrollView>
         
 
         <BasicButton title="Create" onPress={formSubmitHandler}/>

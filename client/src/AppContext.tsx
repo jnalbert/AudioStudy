@@ -112,6 +112,10 @@ export const authReducer = (prevState: AuthTypes, action: actionType) => {
       console.log("Token fetching failed");
     }
 
+    // Turn this off when not in dev mode
+
+    userToken = "dev"
+
     dispatch({ type: "RESTORE_TOKEN", token: userToken });
   };
 
