@@ -1,16 +1,18 @@
-import React, { FC, useEffect, useRef, useState } from "react";
-import { ScrollView, Platform, Text } from "react-native";
+import React, { FC, useEffect, useState } from "react";
+import { ScrollView, Platform, Text, View } from "react-native";
 import styled from "styled-components/native";
 import StyledTextInput from "../../components/Inputs/StyledTextInput";
 import ScreenWrapperComp from "../../shared/ScreenWrapperComp";
 import { useForm } from "react-hook-form";
-import { Text500, } from "../../shared/color";
+import { Primary, Text100, Text400, Text500, } from "../../shared/color";
 import BasicButton from "../../shared/BasicButton";
 import OptionsDrawer from "../../components/Inputs/OptionsDrawer";
 import { ErrorText } from '../../components/Inputs/StyledTextInput';
 import { requestMediaLibraryPermissionsAsync, requestCameraPermissionsAsync, MediaTypeOptions, launchCameraAsync, ImagePickerOptions, launchImageLibraryAsync } from "expo-image-picker";
 import { ImageInfo } from "expo-image-picker/build/ImagePicker.types";
 import CreateAudioFileImage from "../../components/CreateAudioFile/CreateAudioFileImage";
+import ToggleSlider from "../../components/CreateAudioFile/ToggleSlider";
+import ButtonToggleGroup from 'react-native-button-toggle-group';
 
 
 const ScrollViewWrapper = styled.ScrollView`
@@ -44,6 +46,11 @@ const InputtedImagesWrapper = styled.View`
   padding: 0px 14px;
 `
 
+const ToggleSwitchWrapper = styled.View`
+  padding-bottom: 40px;
+  padding-top: 20px;
+`
+
 interface CreateAudioFileFormTypes {
   header: string;
   description: string;
@@ -63,6 +70,8 @@ const CreateAudioFileScreen: FC = () => {
   const [images, setImages] = useState<imageType[]>([])
 
   const [forceState, setForceState] = useState(0);
+
+  const [radioButtonValue, setRadioButtonValue] = useState("Printed Text");
 
 
 
@@ -88,7 +97,10 @@ const CreateAudioFileScreen: FC = () => {
   } = useForm<CreateAudioFileFormTypes>();
 
   const formSubmitData = (data: CreateAudioFileFormTypes) => {
-    console.log(data)
+    const imagesBase64 = images.filter((image) => { return image.base64 });
+    const finalData = { ...data, textType: radioButtonValue, images: imagesBase64 };
+    // do something with data
+    console.log(finalData.textType)
   }
 
   const formSubmitHandler = () => {
@@ -125,7 +137,7 @@ const CreateAudioFileScreen: FC = () => {
     const result = await launchCameraAsync(cameraOptions)
     if (!result.cancelled) {
       setImages([...images, result])
-
+  
     }
   }
   
@@ -133,7 +145,7 @@ const CreateAudioFileScreen: FC = () => {
     const result = await launchImageLibraryAsync(cameraOptions)
     if (!result.cancelled) {
       setImages([...images, result])
- 
+
     }
   }
 
@@ -204,7 +216,7 @@ const CreateAudioFileScreen: FC = () => {
           
           {error && <ErrorText>*{error}</ErrorText>}
 
-          <InputtedImagesScrollView >
+          <InputtedImagesScrollView>
             <InputtedImagesWrapper>
               {images.map(({ uri, base64 }: imageType) => {
                 if (base64) {
@@ -216,8 +228,34 @@ const CreateAudioFileScreen: FC = () => {
             </InputtedImagesWrapper>
           </InputtedImagesScrollView>
         
+          <ToggleSwitchWrapper>
+            {/* <ToggleSlider defaultMode={1} option1="Printed Text" option2="Handwritten" onSelectSwitch={toggleSwitchMove }/> */}
+            <ButtonToggleGroup
+              value={radioButtonValue}
+              highlightBackgroundColor={Primary}
+              highlightTextColor={'white'}
+              inactiveBackgroundColor={Text100}
+              inactiveTextColor={Text400}
+              values={["Printed Text", "Handwritten"]}
+              onSelect={val => setRadioButtonValue(val)}
+              style={{
+                height: 45,
+                width: 327,
+                borderRadius: 70,
+              }}
+              textStyle={{
+                fontFamily: "Inter_400Regular",
+                fontSize: 16,
+                lineHeight: 24,
+                textAlign: "center",
+                letterSpacing: -0.25,
+              }}
+            
+            />
+          </ToggleSwitchWrapper>
 
-        <BasicButton title="Create" onPress={formSubmitHandler}/>
+          <BasicButton title="Create" onPress={formSubmitHandler} />
+          <View style={{height: 30}}></View>
       </ScrollViewWrapper>
       </ScreenWrapperComp>
       <OptionsDrawer optionClicked={optionClicked} drawerOpen={drawerOpen} options={drawerOptions}/>
