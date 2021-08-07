@@ -27,11 +27,12 @@ const PaddedView = styled.View`
 interface BasicButtonProps {
   title: string
   onPress: () => void;
+  style?: {};
 }
-const BasicButton: FC<BasicButtonProps> = ({title, onPress}) => {
+const BasicButton: FC<BasicButtonProps> = ({title, onPress, style}) => {
   return (
     <PaddedView>
-      <TouchableButtonWrapper onPress={onPress}>
+      <TouchableButtonWrapper style={style} onPress={onPress}>
         <ButtonText>{title}</ButtonText>
       </TouchableButtonWrapper>
     </PaddedView>

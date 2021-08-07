@@ -13,6 +13,7 @@ import { ImageInfo } from "expo-image-picker/build/ImagePicker.types";
 import CreateAudioFileImage from "../../components/CreateAudioFile/CreateAudioFileImage";
 import ToggleSlider from "../../components/CreateAudioFile/ToggleSlider";
 import ButtonToggleGroup from 'react-native-button-toggle-group';
+import FileCreatedSection from "../../components/CreateAudioFile/FileCreatedSection";
 
 
 const ScrollViewWrapper = styled.ScrollView`
@@ -61,7 +62,8 @@ type imageType = {
 } & ImageInfo
 
 
-const CreateAudioFileScreen: FC = () => {
+
+const CreateAudioFileScreen: FC<any> = ({navigation}) => {
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -72,6 +74,8 @@ const CreateAudioFileScreen: FC = () => {
   const [forceState, setForceState] = useState(0);
 
   const [radioButtonValue, setRadioButtonValue] = useState("Printed Text");
+
+  const [fileCreated, setFileCreated] = useState(false);
 
 
 
@@ -96,11 +100,16 @@ const CreateAudioFileScreen: FC = () => {
     formState: { errors },
   } = useForm<CreateAudioFileFormTypes>();
 
+  const clearAllState = () => {
+    
+  }
+
   const formSubmitData = (data: CreateAudioFileFormTypes) => {
     const imagesBase64 = images.filter((image) => { return image.base64 });
     const finalData = { ...data, textType: radioButtonValue, images: imagesBase64 };
     // do something with data
     console.log(finalData.textType)
+    setFileCreated(true);
   }
 
   const formSubmitHandler = () => {
@@ -178,6 +187,7 @@ const CreateAudioFileScreen: FC = () => {
 
   return (
     <>
+      {fileCreated && <FileCreatedSection navigation={navigation} visible={fileCreated} />}
     <ScreenWrapperComp>
       <ScrollViewWrapper>
         

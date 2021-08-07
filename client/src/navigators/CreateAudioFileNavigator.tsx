@@ -18,7 +18,7 @@ const CreateAudioFileNavigator: FC = () => {
        
 
       <Stack.Screen
-        name="AudioFiles"
+        name="CreateAudioFile"
         component={CreateAudioFileScreen}
         options={{ headerTitle: () => <StackHeader name="Create Audio File" />, headerShown: true }}
       />    
