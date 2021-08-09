@@ -190,7 +190,7 @@ const CreateAudioFileScreen: FC<any> = ({navigation}) => {
 
   return (
     <>
-      {fileCreated && <FileCreatedSection title="File Created" subheading="*Note the file may take several minutes to appear on the home screen*" buttonTitle="Return Home" buttonOnPress={goBackHome} navigation={navigation} visible={fileCreated} />}
+      {fileCreated && <FileCreatedSection title="File Created" subheading="*Note the file may take several minutes to appear on the home screen*" buttonTitle="Return Home" buttonOnPress={goBackHome} visible={fileCreated} />}
     <ScreenWrapperComp>
       <ScrollViewWrapper>
         

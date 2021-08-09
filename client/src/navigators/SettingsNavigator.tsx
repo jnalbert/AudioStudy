@@ -6,6 +6,7 @@ import { backgroundColor } from "../shared/color";
 import StackHeaderBackButton from "../shared/StackHeader/StackHeaderBackButton";
 import CreateAudioFileScreen from '../screens/main/CreateAudioFileScreen';
 import SettingsScreen from '../screens/main/SettingsScreen';
+import ChangePasswordScreen from '../screens/main/ChangePasswordScreen';
 
 const Stack = createStackNavigator();
 
@@ -22,6 +23,12 @@ const SettingsNavigator: FC = () => {
         name="Settings"
         component={SettingsScreen}
         options={{ headerTitle: () => <StackHeader name="Settings" />, headerShown: true }}
+      />
+      
+      <Stack.Screen
+        name="ChangePassword"
+        component={ChangePasswordScreen}
+        options={{ headerTitle: () => <StackHeader name="Change Password" />, headerShown: true }}
       />    
     
 

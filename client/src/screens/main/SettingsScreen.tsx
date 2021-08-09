@@ -125,7 +125,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   }
 
   const handleChangePassword = () => {
-
+    navigation.navigate("ChangePassword")
   }
 
   const { signOut } = useContext(AuthContext);

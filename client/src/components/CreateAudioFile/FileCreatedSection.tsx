@@ -41,14 +41,13 @@ const ButtonWrapper = styled.View`
 `
 interface FileCreateSectionProps {
   visible: boolean;
-  navigation: any;
   title: string;
   subheading: string;
   buttonTitle: string;
   buttonOnPress: () => void;
 }
 
-const FileCreatedSection: FC<FileCreateSectionProps> = ({ visible, navigation, title, subheading, buttonTitle, buttonOnPress }) => {
+const FileCreatedSection: FC<FileCreateSectionProps> = ({ visible, title, subheading, buttonTitle, buttonOnPress }) => {
 
   const [isVisible, setIsVisible] = useState(visible);
 
