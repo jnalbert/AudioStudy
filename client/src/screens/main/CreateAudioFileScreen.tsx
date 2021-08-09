@@ -180,10 +180,17 @@ const CreateAudioFileScreen: FC<any> = ({navigation}) => {
 
     setForceState(forceState + 1);
   }
+  const goBackHome = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'AudioFiles' }],
+    });
+  }
+ 
 
   return (
     <>
-      {fileCreated && <FileCreatedSection navigation={navigation} visible={fileCreated} />}
+      {fileCreated && <FileCreatedSection title="File Created" subheading="*Note the file may take several minutes to appear on the home screen*" buttonTitle="Return Home" buttonOnPress={goBackHome} navigation={navigation} visible={fileCreated} />}
     <ScreenWrapperComp>
       <ScrollViewWrapper>
         

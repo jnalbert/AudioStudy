@@ -42,18 +42,19 @@ const ButtonWrapper = styled.View`
 interface FileCreateSectionProps {
   visible: boolean;
   navigation: any;
+  title: string;
+  subheading: string;
+  buttonTitle: string;
+  buttonOnPress: () => void;
 }
 
-const FileCreatedSection: FC<FileCreateSectionProps> = ({ visible, navigation }) => {
+const FileCreatedSection: FC<FileCreateSectionProps> = ({ visible, navigation, title, subheading, buttonTitle, buttonOnPress }) => {
 
   const [isVisible, setIsVisible] = useState(visible);
 
   
-  const handleReturnToHome = () => {
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'AudioFiles' }],
-    });
+  const handleOnPress = () => {
+    buttonOnPress();
     // navigation.navigate("AudioFiles")
     setIsVisible(false);
   }
@@ -70,16 +71,16 @@ const FileCreatedSection: FC<FileCreateSectionProps> = ({ visible, navigation })
       <BlurView intensity={80} tint="light" style={[StyleSheet.absoluteFill, {alignItems: "center", justifyContent:"center"}]}>
         <WordsWrapper>
           <Header>
-            File Created
+            {title}
           </Header>
 
           <SubHeading>
-            *Note the file may take several minutes to appear on the home screen*
+            {subheading}
           </SubHeading>
 
           
           <ButtonWrapper>
-            <BasicButton style={{width: 311}} title="Return Home" onPress={handleReturnToHome}/>
+            <BasicButton style={{width: 311}} title={buttonTitle} onPress={handleOnPress}/>
           </ButtonWrapper>
           
         </WordsWrapper>
