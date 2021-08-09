@@ -28,12 +28,13 @@ interface BasicButtonProps {
   title: string
   onPress: () => void;
   style?: {};
+  buttonTextStyle?: {};
 }
-const BasicButton: FC<BasicButtonProps> = ({title, onPress, style}) => {
+const BasicButton: FC<BasicButtonProps> = ({title, onPress, style, buttonTextStyle}) => {
   return (
     <PaddedView>
       <TouchableButtonWrapper style={style} onPress={onPress}>
-        <ButtonText>{title}</ButtonText>
+        <ButtonText style={buttonTextStyle} >{title}</ButtonText>
       </TouchableButtonWrapper>
     </PaddedView>
     

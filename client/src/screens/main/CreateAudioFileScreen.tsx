@@ -100,10 +100,6 @@ const CreateAudioFileScreen: FC<any> = ({navigation}) => {
     formState: { errors },
   } = useForm<CreateAudioFileFormTypes>();
 
-  const clearAllState = () => {
-    
-  }
-
   const formSubmitData = (data: CreateAudioFileFormTypes) => {
     const imagesBase64 = images.filter((image) => { return image.base64 });
     const finalData = { ...data, textType: radioButtonValue, images: imagesBase64 };

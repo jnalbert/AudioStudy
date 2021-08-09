@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useContext } from "react";
 import { View, Text } from "react-native";
 import ScreenWrapperComp from "../../shared/ScreenWrapperComp";
 import { CenterView } from "../../styles/AppStyles";
@@ -33,7 +33,7 @@ export interface LoginFormProps {
 }
 
 const LoginScreen: FC = () => {
-  const { signIn } = React.useContext(AuthContext);
+  const { signIn } = useContext(AuthContext);
   
   const {
     control,
