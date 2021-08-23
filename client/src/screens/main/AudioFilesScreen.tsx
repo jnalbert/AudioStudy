@@ -57,7 +57,7 @@ interface AudioFileScreenProps {
 
 const AudioFilesScreen: FC<AudioFileScreenProps> = ({navigation}) => {
 
-  const initialAudioFiles = [{ imgUrl: "imageUrl", header: "French Revolution", description: "Text from history class relating", length: 53, date: new Date(), fileId: "23lnfklwns", display: true },
+  const initialAudioFiles = [{ imgUrl: "imageUrl", header: "French Revolution", description: "Text from history class relating This is more jibber japper thatn truth", length: 200, date: new Date(), fileId: "23lnfklwns", display: true },
     { imgUrl: "imageUrl", header: "Checkh", description: "Text from history class relating", length: 83, date: new Date(), fileId: "lknsdflknklt5", display: true },
     { imgUrl: "imageUrl", header: "Seocond", description: "Text from history class relating", length: 83, date: new Date(), fileId: "llknsdlk", display: true },
     { imgUrl: "imageUrl", header: "Thrid day", description: "Text from history class relating", length: 83, date: new Date(), fileId: "8900onegonlow", display: true },

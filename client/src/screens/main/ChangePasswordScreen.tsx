@@ -33,7 +33,8 @@ const ChangePasswordScreen: FC<any> = ({navigation}) => {
     handleSubmit,
     formState: { errors },
     getValues,
-    setError
+    setError,
+    clearErrors
   } = useForm<ChangePasswordFormProps>();
 
   const onSubmit = (data: ChangePasswordFormProps) => {
@@ -58,6 +59,11 @@ const ChangePasswordScreen: FC<any> = ({navigation}) => {
       handleSubmit(onSubmit)()
     }
   }
+  
+  useEffect(() => {
+    console.log("worked")
+    clearErrors("oldPassword")
+  }, [getValues("oldPassword")])
 
   const goBackToSettings = () => {
     navigation.navigate("Settings")
