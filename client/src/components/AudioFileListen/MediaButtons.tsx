@@ -11,7 +11,7 @@ const MediaButtonsWrapper = styled.View`
   align-items: center;
   justify-content: space-between;
   width: 60%;
-  margin-top: 35px;
+  margin-top: 40px;
 `
 
 const MediaButton = styled.View`

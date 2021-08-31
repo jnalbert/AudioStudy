@@ -4,6 +4,7 @@ import styled from "styled-components/native"
 import AudioSeeker from '../../components/AudioFileListen/AudioSeeker';
 import FileInfoComp from '../../components/AudioFileListen/FileInfoComp';
 import MediaButtons from '../../components/AudioFileListen/MediaButtons';
+import VolumeSliderComp from '../../components/AudioFileListen/VolumeSliderComp';
 import ScreenWrapperComp from '../../shared/ScreenWrapperComp';
 
 
@@ -62,7 +63,8 @@ const AudioFileListenScreen: FC<AudioFileListenScreen> = ({ route }) => {
     <ScreenWrapperComp>
       <FileInfoComp imgData={imgUrl} header={header} description={description} />
       <AudioSeeker onValueChange={onValueChange} onSeekStart={onSeekStart} onSeekComplete={onSeekComplete} fileLengthSeconds={length} currentPositionSeconds={ currentPosition}/>
-      <MediaButtons isPaused={!isPlaying} onPressMainButton={onPressPlayPause} traverse={traverseThrough}/>
+      <MediaButtons isPaused={!isPlaying} onPressMainButton={onPressPlayPause} traverse={traverseThrough} />
+      <VolumeSliderComp/>
     </ScreenWrapperComp>
   )
 }
