@@ -4,6 +4,7 @@ import styled from "styled-components/native"
 //@ts-ignore
 import Slider from "@brlja/react-native-slider";
 import { Secondary, Text300, Text500 } from '../../shared/color';
+import { Sound } from 'expo-av/build/Audio';
 
 
 
@@ -12,7 +13,11 @@ const OverallWrapper = styled.View`
     padding-top: 55px;
 `
 
-const VolumeSliderComp: FC = () => {
+interface VolumeSliderComp {
+  soundPlayer: Sound | undefined;
+}
+
+const VolumeSliderComp: FC<VolumeSliderComp> = ({soundPlayer}) => {
 
   const [volume, setVolume] = useState(0)
 

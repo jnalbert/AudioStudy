@@ -17,6 +17,7 @@
     "@react-navigation/stack": "^5.14.5",
     "expo": "~42.0.1",
     "expo-app-loading": "^1.1.2",
+    "expo-av": "~9.2.3",
     "expo-blur": "~9.0.3",
     "expo-image-picker": "~10.2.2",
     "expo-secure-store": "~10.2.0",
