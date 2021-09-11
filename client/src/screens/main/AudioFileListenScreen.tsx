@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import styled from "styled-components/native"
 import AudioSeeker from '../../components/AudioFileListen/AudioSeeker';
@@ -52,6 +52,7 @@ const AudioFileListenScreen: FC<AudioFileListenScreen> = ({ route }) => {
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentPosition, setCurrentPosition] = useState(0);
+  const [isBuffering, setIsBuffering] = useState(false);
 
   
   const { imgUrl, header, description, length, fileId } = route.params;
@@ -73,7 +74,7 @@ const AudioFileListenScreen: FC<AudioFileListenScreen> = ({ route }) => {
 
   const onSeekComplete = (time: number) => {
     setCurrentPosition(rounder(time))
-    sound?.setPositionAsync(rounder(time) * 1000)
+    sound.current.setPositionAsync(rounder(time) * 1000)
     console.log(isPlaying)
     isPlaying && playAudio()
   }
@@ -90,7 +91,7 @@ const AudioFileListenScreen: FC<AudioFileListenScreen> = ({ route }) => {
       newAmount = Math.min(length, currentPosition + amount)
     }
     setCurrentPosition(newAmount)
-    sound?.setPositionAsync(newAmount * 1000)
+    sound.current.setPositionAsync(newAmount * 1000)
   }
 
 
@@ -103,53 +104,85 @@ const AudioFileListenScreen: FC<AudioFileListenScreen> = ({ route }) => {
     
   })
 
-  const [sound, setSound] = useState<Sound>();
+  let sound = useRef(new Audio.Sound());
 
   useEffect(() => {
+    let isMounted = true;
+    loadSound().then(() => {
+      console.log("loaded")
+      isMounted && sound.current.setOnPlaybackStatusUpdate(audioPlayBack);
+    })
 
-    loadSound()
+    return () => {
+      isMounted = false;
+    }
     
   }, [])
 
   const loadSound = async () => {
     console.log('Loading Sound');
-    const { sound } = await Audio.Sound.createAsync(
+    await sound.current.loadAsync(
       { uri: "http://russprince.com/hobbies/files/13%20Beethoven%20-%20Fur%20Elise.mp3" },
-      {progressUpdateIntervalMillis: 100},
+      { progressUpdateIntervalMillis: 100 }
     );
-    setSound(sound);
-    sound?.setOnPlaybackStatusUpdate(audioPlayBack);
+    // const { sound } = await Audio.Sound.createAsync(
+    //   { uri: "http://russprince.com/hobbies/files/13%20Beethoven%20-%20Fur%20Elise.mp3" },
+    //   {progressUpdateIntervalMillis: 100},
+    // );
 
   }
 
-  const audioPlayBack = async (status: any): Promise<void> => {
-    await setDuration(parseInt(status.durationMillis) / 1000)
+  const audioPlayBack = (status: any): void => {
+    setDuration(parseInt(status.durationMillis) / 1000)
   
-    await setCurrentPosition(parseInt(status.positionMillis) / 1000)
+    setCurrentPosition(parseInt(status.positionMillis) / 1000)
 
     status.didJustFinish && setIsPlaying(false);
+  
+    // setIsBuffering(status.isBuffering)
+    // console.log(status.isBuffering, "Buffering")
 
+    // status.isPlaying && setIsBuffering(false)
+
+    // setIsBuffering(status.playableDurationMillis < status.positionMillis)
+    // console.log(status.playableDurationMillis < status.positionMillis, "Buffering")
+    // console.log("playable", status.playableDurationMillis)
+    // console.log("current", status.positionMillis)
+
+    // console.log(status)
   }
 
   const playAudio = async () => {
-    console.log('Playing Sound');
-    setIsPlaying(true);
-    await sound?.playAsync();
-    
+    if (await isAudioLoaded) {
+      console.log('Playing Sound');
+      setIsPlaying(true);
+      await sound.current.playAsync();  
+    }
+   
+  }
+  
+  const isAudioLoaded = async () => {
+    const status: any = await sound.current.getStatusAsync();
+    if (status.isLoaded || status.isBuffering) {
+      return false;
+    }
+    return true;
   }
 
   const pauseAudio = async () => {
-    console.log('Pausing Sound');
-    setIsPlaying(false);
-    await sound?.pauseAsync();
-    
+    if (await isAudioLoaded) {
+      console.log('Pausing Sound');
+      setIsPlaying(false);
+      await sound.current.pauseAsync();  
+    }
+   
   }
 
   useEffect(() => {
-    return sound
+    return sound.current
       ? () => {
           console.log('Unloading Sound');
-          sound.unloadAsync(); }
+          sound.current.unloadAsync(); }
       : undefined;
   }, [sound]);
 
@@ -158,8 +191,8 @@ const AudioFileListenScreen: FC<AudioFileListenScreen> = ({ route }) => {
     <ScreenWrapperComp>
       <FileInfoComp imgData={imgUrl} header={header} description={description} />
       <AudioSeeker onValueChange={onValueChange} onSeekStart={onSeekStart} onSeekComplete={onSeekComplete} fileLengthSeconds={duration} currentPositionSeconds={ currentPosition}/>
-      <MediaButtons isPaused={!isPlaying} onPressMainButton={onPressPlayPause} traverse={traverseThrough} />
-      <VolumeSliderComp soundPlayer={sound} />
+      <MediaButtons isPaused={!isPlaying} onPressMainButton={onPressPlayPause} traverse={traverseThrough} isBuffering={isBuffering} />
+      <VolumeSliderComp soundPlayer={sound.current} />
 
       <ClosedCaptionsWrapper>
         <TouchableOpacity onPress={() => setIsShowCaptions(!isShowCaptions)}>
