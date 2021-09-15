@@ -28,10 +28,15 @@ const emailRegExp = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|
 const SignUpScreen: FC = () => {
   const { signUp } = React.useContext(AuthContext);
   
-  const { control, handleSubmit, formState: { errors } } = useForm<SignUpFormProps>();
+  const { control, handleSubmit, formState: { errors }, setError } = useForm<SignUpFormProps>();
 
-  const onSubmit = (data: SignUpFormProps) => {
-    signUp(data)
+  const onSubmit = async (data: SignUpFormProps) => {
+    const response = await signUp(data)
+   
+    if (response) {
+      const errorConfig = {type: "manual", message: response}
+      setError("password", errorConfig)
+    } 
   }
 
   return (
@@ -40,7 +45,7 @@ const SignUpScreen: FC = () => {
         <InputWrapper>
           <StyledTextInput hideText={false} error={errors.name} rules={{required: "This field is required"}} control={ control} placeHolderText="Name" name="name"/>
           <StyledTextInput hideText={false} error={errors.email} rules={{required: "This field is required", pattern:{value: emailRegExp, message: "Not a valid email"}}} control={ control} placeHolderText="Email" name="email" />
-          <StyledTextInput hideText={true} error={errors.password} rules={{required: "This field is required", minLength: {value: 5, message: "Password is too short"}}} control={ control} placeHolderText="Password" name="password"/>
+          <StyledTextInput hideText={true} error={errors.password} rules={{required: "This field is required", minLength: {value: 6, message: "Password is too short"}}} control={ control} placeHolderText="Password" name="password"/>
         </InputWrapper>
 
         <ButtonWrapper>

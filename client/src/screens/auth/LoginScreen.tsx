@@ -39,10 +39,16 @@ const LoginScreen: FC = () => {
     control,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<LoginFormProps>();
 
-  const onSubmit = (data: LoginFormProps) => {
-    signIn(data)
+  const onSubmit = async (data: LoginFormProps) => {
+    const response = await signIn(data)
+   
+    if (response) {
+      const errorConfig = {type: "manual", message: response}
+      setError("password", errorConfig)
+    } 
   };
 
   const forgotPassword = () => {

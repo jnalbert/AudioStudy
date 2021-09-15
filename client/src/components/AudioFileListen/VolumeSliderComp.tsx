@@ -9,10 +9,6 @@ import { Sound } from 'expo-av/build/Audio';
 import { FontAwesome } from '@expo/vector-icons'; 
 
 
-
-
-
-
 const OverallWrapper = styled.View`
     padding-top: 55px;
     flex-direction: row;

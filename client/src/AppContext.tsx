@@ -1,39 +1,36 @@
 import React, {
-  FC,
-  useEffect,
-  useReducer,
-  useMemo,
   createContext,
 } from "react";
 import { View } from "react-native";
-import AppLoading from "expo-app-loading";
+
 
 import { getItemAsync } from "expo-secure-store";
 import { LoginFormProps } from "./screens/auth/LoginScreen";
 import { SignUpFormProps } from "./screens/auth/SignUpScreen";
+import { Auth } from '../config/firebase';
 
 
 export interface AuthTypes {
   isLoading: boolean;
   isSignout: boolean;
-  userToken: string | null;
+  userUuid: string | null;
 }
 
 export interface AuthContextFunctionTypes {
-  signIn: (data: LoginFormProps) => Promise<void>;
+  signIn: (data: LoginFormProps) => Promise<string | null>;
   signOut: () => void;
-  signUp: (data: SignUpFormProps) => Promise<void>;
+  signUp: (data: SignUpFormProps) => Promise<string | null>;
   authValues: AuthTypes;
 }
 
 const defaultContextValue = {
-  signIn: async (data: LoginFormProps) => {return;},
+  signIn: async (data: LoginFormProps) => {return null;},
   signOut: () => { return },
-  signUp: async (data: SignUpFormProps) => {return;},
+  signUp: async (data: SignUpFormProps) => {return null;},
   authValues: {
     isLoading: true,
     isSignout: false,
-    userToken: null
+    userUuid: null
   }
 }
 
@@ -55,20 +52,20 @@ export const authReducer = (prevState: AuthTypes, action: actionType) => {
     case "RESTORE_TOKEN":
       return {
         ...prevState,
-        userToken: action.token,
+        userUuid: action.token,
         isLoading: false,
       };
     case "SIGN_IN":
       return {
         ...prevState,
         isSignout: false,
-        userToken: action.token,
+        userUuid: action.token,
       };
     case "SIGN_OUT":
       return {
         ...prevState,
         isSignout: true,
-        userToken: null,
+        userUuid: null,
       };
     default:
       return {
@@ -85,9 +82,29 @@ export const authReducer = (prevState: AuthTypes, action: actionType) => {
       // In the example, we'll use a dummy token
       console.log(data)
 
-      dispatch({ type: "SIGN_IN", token: "dummy-auth-token" });
+      try {
+        const userResponse = await Auth?.signInWithEmailAndPassword(data.email, data.password)
+        // console.log(userResponse)
+        dispatch({ type: "SIGN_IN", token: userResponse?.user?.uid });
+      } catch (error) {
+        console.log(error.code)
+        if (error.code === "auth/wrong-password" || error.code === "auth/user-not-found") {
+          return "Email or Password is incorrect"
+        }
+        return null;
+      }
+
+      return null;
+      
     },
-    signOut: () => dispatch({ type: "SIGN_OUT" }),
+    signOut: () => {
+      dispatch({ type: "SIGN_OUT" })
+      try {
+        Auth?.signOut()
+      } catch (error) {
+        console.log(error)
+      }
+    },
 
     signUp: async (data: SignUpFormProps) => {
       // In a production app, we need to send user data to server and get a token
@@ -96,27 +113,59 @@ export const authReducer = (prevState: AuthTypes, action: actionType) => {
       // In the example, we'll use a dummy token
       console.log(data)
 
-      dispatch({ type: "SIGN_IN", token: "dummy-auth-token" });
+      try {
+        const userResponse = await Auth?.createUserWithEmailAndPassword(data.email, data.password)
+
+        // console.log(userResponse)
+
+        // handle adding the user data to the data base with the api
+    //     const db = firebase.firestore();
+    // db.collection("users")
+    //   .doc(currentUser.uid)
+    //   .set({
+    //     email: currentUser.email,
+    //     lastName: lastName,
+    //     firstName: firstName,
+    //   });
+        dispatch({ type: "SIGN_IN", token: userResponse?.user?.uid });
+      } catch (error) {
+        console.log(error.code)
+        if (error.code === "auth/email-already-in-use" ) {
+          return "This email is already associated with an account"
+        }
+        return null;
+        
+      }
+      return null;
+
     },
     authValues: state
   })
 
 
   export const getTokenAsync = async (dispatch: any) => {
-    let userToken = null
-
     try {
-      userToken = await getItemAsync("userToken");
-      
+      await Auth?.onAuthStateChanged((user) => {
+        let userUuid = null;
+        if (user) {
+          userUuid = user.uid
+        }
+
+        // Turn this off when not in dev mode
+        // userUuid = "dev"
+
+        // console.log(userUuid, "uuid")
+        dispatch({ type: "RESTORE_TOKEN", token: userUuid });
+      });
     } catch (e) {
-      console.log("Token fetching failed");
+      console.log(e);
     }
 
     // Turn this off when not in dev mode
 
-    userToken = "dev"
-
-    dispatch({ type: "RESTORE_TOKEN", token: userToken });
+    
+  // userUuid = "dev"
+    
   };
 
 

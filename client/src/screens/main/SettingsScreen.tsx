@@ -131,7 +131,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   const { signOut } = useContext(AuthContext);
 
   const handleLogout = () => {
-    signOut()
+    console.log(signOut())
   }
 
   return (

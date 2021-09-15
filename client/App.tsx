@@ -21,7 +21,7 @@ const App: FC<any> = ({ navigation }) => {
     {
       isLoading: true,
       isSignout: false,
-      userToken: null,
+      userUuid: null,
     }
   );
 
@@ -44,7 +44,7 @@ const App: FC<any> = ({ navigation }) => {
         <AppLoading />
       ) : (
         <AppWrapperView>
-          {state?.userToken === null ? (
+          {state?.userUuid === null ? (
             <AuthNavigator />
           ) : (
             <MainNavigator />
