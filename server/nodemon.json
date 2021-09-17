@@ -1,0 +1,6 @@
+{
+  "watch": ["src/server.ts"],
+  "ext": "ts",
+  "ignore": ["src/server.js"],
+  "exec": "npx tsc /Users/justinalbert/Code_Projects/ReactNativeApps/AudioStudy/server/src/server.ts; node /Users/justinalbert/Code_Projects/ReactNativeApps/AudioStudy/server/src/server.js"    
+}
