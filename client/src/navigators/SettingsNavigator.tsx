@@ -4,18 +4,18 @@ import { createStackNavigator } from "@react-navigation/stack";
 import StackHeader from "../shared/StackHeader/StackHeader";
 import { backgroundColor } from "../shared/color";
 import StackHeaderBackButton from "../shared/StackHeader/StackHeaderBackButton";
-import CreateAudioFileScreen from '../screens/main/CreateAudioFileScreen';
 import SettingsScreen from '../screens/main/SettingsScreen';
 import ChangePasswordScreen from '../screens/main/ChangePasswordScreen';
 
 const Stack = createStackNavigator();
 
-const SettingsNavigator: FC = () => {
+const SettingsNavigator: FC<any> = ({ route }) => {
+  
   return (
     <Stack.Navigator screenOptions={{
       headerStyle: { backgroundColor: backgroundColor, borderBottomColor: backgroundColor, shadowColor: 'transparent' },
       headerBackImage: () => { return <StackHeaderBackButton /> },
-      headerBackTitleVisible: false
+      headerBackTitleVisible: false,
     }}>
        
 

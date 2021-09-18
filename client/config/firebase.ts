@@ -1,5 +1,6 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/firestore'
 import Constants from 'expo-constants';
 
 // Initialize Firebase
@@ -23,3 +24,4 @@ if (firebase.apps.length === 0) {
 
 export const FirebaseAll = Firebase
 export const Auth = Firebase?.auth();
+export const db = Firebase?.firestore()

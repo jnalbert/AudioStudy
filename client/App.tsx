@@ -11,7 +11,7 @@ import AppLoading from "expo-app-loading";
 import AuthNavigator from "./src/navigators/AuthNavigator";
 import { NavigationContainer } from "@react-navigation/native";
 import { AppWrapperView } from "./src/styles/AppStyles";
-import { AuthContext, authReducer, getTokenAsync, AuthTypes, useMemoFunction, AuthContextFunctionTypes } from "./src/AppContext";
+import { AuthContext, authReducer, getTokenAsync, AuthTypes, useMemoFunction, AuthContextFunctionTypes, _deleteStoredUuid } from "./src/AppContext";
 import { View, Text } from "react-native";
 import MainNavigator from "./src/navigators/MainNavigator";
 
@@ -30,12 +30,20 @@ const App: FC<any> = ({ navigation }) => {
     Inter_400Regular,
   });
 
+  
+
+  // console.log(state)
   useEffect(() => {
     getTokenAsync(dispatch);
+    return () => {
+      _deleteStoredUuid()
+    }
   }, []);
+
 
   const authContext = useMemo<AuthContextFunctionTypes>(() => useMemoFunction(dispatch, state), []);
 
+  // console.log(authContext, "auth context")
   
   return (
     <AuthContext.Provider value={authContext}>

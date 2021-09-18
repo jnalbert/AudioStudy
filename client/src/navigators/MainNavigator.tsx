@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useContext } from "react";
 import { View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import SettingsScreen from "../screens/main/SettingsScreen";
@@ -12,6 +12,7 @@ import { Primary, Text500 } from '../shared/color';
 import AudioFilesNavigator from "./AudioFilesNavigator";
 import CreateAudioFileNavigator from "./CreateAudioFileNavigator";
 import SettingsNavigator from "./SettingsNavigator";
+import { AuthContext } from '../AppContext';
 
 const displayTabs = (route: any) => {
   const routeName = getFocusedRouteNameFromRoute(route);
@@ -50,6 +51,7 @@ const MainNavigator: FC = () => {
         showLabel: false,
         tabStyle: {paddingTop: 17}
       }}
+      
     >
       <Tab.Screen name="AudioFiles" component={AudioFilesNavigator} />
       <Tab.Screen name="CreateAudioFile" component={CreateAudioFileNavigator} />

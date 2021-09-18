@@ -2,7 +2,9 @@ import React, { FC, useContext, useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import styled from "styled-components/native"
-import { AuthContext } from '../../AppContext';
+import { getUserData } from '../../../firebase/FirestoreFunctions';
+import { UserTypeDB } from '../../../firebase/types/miscTypes';
+import { AuthContext, _getStoredUuid } from '../../AppContext';
 import InformationSection from '../../components/Settings/InformationSection';
 import BasicButton from '../../shared/BasicButton';
 import { Primary, Text200, Text400, backgroundColor, borderColor, logoutRed, backgroundGray } from '../../shared/color';
@@ -79,19 +81,28 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   const [userInfo, setUserInfo] = useState<UserInfoType>({ name: "", email: "", dateCreated: "", audioFilesCreated: 0, totalLengthOfFiles: "" })
   const [initials, setInitials] = useState({ firstInitial: "", lastInitial: "" })
   
+  const fetchInitialData = async () => {
+    // get data from api
   
+    const uuid = await _getStoredUuid();
+    console.log(uuid, "stored")
+    const { name, dateJoined, totalAudioFileLengthSeconds, totalAudioFiles, email } = await getUserData(uuid || "");
+    
+    // const rawData = {name: "Justin Albert", email: "jnalbert879@gmail.com", dateCreated: new Date().toString(), audioFilesCreated: 9, totalLengthOfFiles: 5283}
+
+    const newDate = getFormattedDate(new Date(dateJoined).toString());
+    const lengthOfFilesFormatted = getFormattedFilesLength(totalAudioFileLengthSeconds)
+    setUserInfo({ name: name, email: email, dateCreated: newDate, audioFilesCreated: totalAudioFiles, totalLengthOfFiles: lengthOfFilesFormatted })
+    getThumbnailInitials(name);
+  }
+
+  const { signOut } = useContext(AuthContext);
+
 
 
   useEffect(() => {
-    // get data from api
-
-    const rawData = {name: "Justin Albert", email: "jnalbert879@gmail.com", dateCreated: new Date().toString(), audioFilesCreated: 9, totalLengthOfFiles: 5283}
-
-    const name = "Justin Albert"
-    const newDate = getFormattedDate(rawData.dateCreated);
-    const lengthOfFilesFormatted = getFormattedFilesLength(rawData.totalLengthOfFiles)
-    setUserInfo({ name: name, email: "jnalbert879@gmail.com", dateCreated: newDate, audioFilesCreated: 10, totalLengthOfFiles: lengthOfFilesFormatted })
-    getThumbnailInitials(name);
+    fetchInitialData()
+    
   }, [])
 
   const getFormattedFilesLength = (seconds: number): string => {
@@ -128,7 +139,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     navigation.navigate("ChangePassword")
   }
 
-  const { signOut } = useContext(AuthContext);
+  
 
   const handleLogout = () => {
     console.log(signOut())

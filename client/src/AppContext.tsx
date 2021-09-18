@@ -4,10 +4,13 @@ import React, {
 import { View } from "react-native";
 
 
-import { getItemAsync } from "expo-secure-store";
+
+
 import { LoginFormProps } from "./screens/auth/LoginScreen";
 import { SignUpFormProps } from "./screens/auth/SignUpScreen";
 import { Auth } from '../config/firebase';
+import { addNewAccountToDB } from "../firebase/FirestoreFunctions";
+import { setItemAsync, getItemAsync, deleteItemAsync } from "expo-secure-store";
 
 
 export interface AuthTypes {
@@ -84,9 +87,12 @@ export const authReducer = (prevState: AuthTypes, action: actionType) => {
 
       try {
         const userResponse = await Auth?.signInWithEmailAndPassword(data.email, data.password)
-        // console.log(userResponse)
+        // console.log(userResponse?.user?.metadata.creationTime)
+
+
+        // console.log(userResponse?.user?.uid, "uuid logit" )
         dispatch({ type: "SIGN_IN", token: userResponse?.user?.uid });
-      } catch (error) {
+      } catch (error: any) {
         console.log(error.code)
         if (error.code === "auth/wrong-password" || error.code === "auth/user-not-found") {
           return "Email or Password is incorrect"
@@ -117,18 +123,24 @@ export const authReducer = (prevState: AuthTypes, action: actionType) => {
         const userResponse = await Auth?.createUserWithEmailAndPassword(data.email, data.password)
 
         // console.log(userResponse)
+        // console.log(new Date(userResponse?.user?.metadata?.creationTime))
 
-        // handle adding the user data to the data base with the api
-    //     const db = firebase.firestore();
-    // db.collection("users")
-    //   .doc(currentUser.uid)
-    //   .set({
-    //     email: currentUser.email,
-    //     lastName: lastName,
-    //     firstName: firstName,
-    //   });
+        const creationDate = userResponse?.user?.metadata?.creationTime
+
+        const newUserObject = {
+          name: data.name,
+          email: data.email,
+          dateJoined: creationDate ? new Date(creationDate).toISOString() : "",
+          totalAudioFiles: 0,
+          totalAudioFileLengthSeconds: 0,
+          uuid: userResponse?.user?.uid || "",
+        }
+
+        addNewAccountToDB(newUserObject)
+
+    
         dispatch({ type: "SIGN_IN", token: userResponse?.user?.uid });
-      } catch (error) {
+      } catch (error: any) {
         console.log(error.code)
         if (error.code === "auth/email-already-in-use" ) {
           return "This email is already associated with an account"
@@ -143,22 +155,27 @@ export const authReducer = (prevState: AuthTypes, action: actionType) => {
   })
 
 
-  export const getTokenAsync = async (dispatch: any) => {
-    try {
-      await Auth?.onAuthStateChanged((user) => {
+export const getTokenAsync = async (dispatch: any) => {
+
+  try {
+      Auth?.onAuthStateChanged(async(user) => {
         let userUuid = null;
         if (user) {
           userUuid = user.uid
+          await _storeUuid(userUuid);
         }
 
         // Turn this off when not in dev mode
         // userUuid = "dev"
 
-        // console.log(userUuid, "uuid")
-        dispatch({ type: "RESTORE_TOKEN", token: userUuid });
+        console.log(userUuid, "uuid")
+        
+        await dispatch({ type: "RESTORE_TOKEN", token: userUuid });
+       
       });
     } catch (e) {
       console.log(e);
+      
     }
 
     // Turn this off when not in dev mode
@@ -166,6 +183,30 @@ export const authReducer = (prevState: AuthTypes, action: actionType) => {
     
   // userUuid = "dev"
     
-  };
+};
+  
+const _storeUuid = async (uuid: string) => {
+  try {
+    await setItemAsync('firebaseUserUuid', uuid);
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const _getStoredUuid = async () => {
+  try {
+    const value = await getItemAsync('firebaseUserUuid');
+    if (value !== null) {
+      // We have data!!
+      return value;
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const _deleteStoredUuid = async () => {
+  await deleteItemAsync('firebaseUserUuid')
+}
 
 
