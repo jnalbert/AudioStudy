@@ -102,7 +102,6 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     fetchInitialData()
-    
   }, [])
 
   const getFormattedFilesLength = (seconds: number): string => {

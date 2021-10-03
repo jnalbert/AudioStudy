@@ -14,6 +14,8 @@ import CreateAudioFileImage from "../../components/CreateAudioFile/CreateAudioFi
 import ToggleSlider from "../../components/CreateAudioFile/ToggleSlider";
 import ButtonToggleGroup from 'react-native-button-toggle-group';
 import FileCreatedSection from "../../components/CreateAudioFile/FileCreatedSection";
+import { createNewAudioFile } from '../../../firebase/FirestoreFunctions';
+import { _getStoredUuid } from "../../AppContext";
 
 
 const ScrollViewWrapper = styled.ScrollView`
@@ -61,7 +63,12 @@ type imageType = {
   cancelled: false;
 } & ImageInfo
 
-
+export interface FinalImageDataType {
+  textType: string;
+  images: imageType[];
+  header: string;
+  description: string;
+}
 
 const CreateAudioFileScreen: FC<any> = ({navigation}) => {
 
@@ -100,12 +107,14 @@ const CreateAudioFileScreen: FC<any> = ({navigation}) => {
     formState: { errors },
   } = useForm<CreateAudioFileFormTypes>();
 
-  const formSubmitData = (data: CreateAudioFileFormTypes) => {
+  const formSubmitData = async (data: CreateAudioFileFormTypes) => {
     const imagesBase64 = images.filter((image) => { return image.base64 });
-    const finalData = { ...data, textType: radioButtonValue, images: imagesBase64 };
+    const finalData: FinalImageDataType = { ...data, textType: radioButtonValue, images: imagesBase64 };
     // do something with data
+    const uuid = await _getStoredUuid();
     console.log(finalData.textType)
-    setFileCreated(true);
+    await setFileCreated(true);
+    createNewAudioFile(uuid as string, finalData);
   }
 
   const formSubmitHandler = () => {
@@ -195,7 +204,7 @@ const CreateAudioFileScreen: FC<any> = ({navigation}) => {
       <ScrollViewWrapper>
         
         <InputSectionWrapper>
-          <InputLabel>Header</InputLabel>
+          <InputLabel>Title</InputLabel>
           <StyledTextInput
             placeHolderText=""
             control={control}

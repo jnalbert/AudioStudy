@@ -1,0 +1,10 @@
+# Compiled JavaScript files
+lib/**/*.js
+lib/**/*.js.map
+
+# TypeScript v1 declaration files
+typings/
+
+# Node.js dependency directory
+node_modules/
+/cac-2021-firebase-adminsdk-1eie4-7f277e5b8a.json

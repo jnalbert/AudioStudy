@@ -14,3 +14,15 @@ export interface UserTypeClient {
   totalAudioFileLengthSeconds: number;
   uuid: string;
 }
+
+export interface AudioFileType {
+  userId: string;
+  header: string;
+  description: string;
+  dateCreated: string;
+  thumbnailUrl: string;
+  lengthInSeconds: number;
+  fileId: string;
+  audioFileRef: string;
+}
+
