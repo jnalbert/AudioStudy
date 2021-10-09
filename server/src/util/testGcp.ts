@@ -30,55 +30,55 @@ const fileName = './images/BetterTextImage.png';
 // recognizeText(fileName, "computerText")
 
 
-const imageToTextGCP = async (fileRefs: any[], type: string, uuid: string) => {
-  // const overallResult: any = [];
-  console.log("started");
+// const imageToTextGCP = async (fileRefs: any[], type: string, uuid: string) => {
+//   // const overallResult: any = [];
+//   console.log("started");
   
-  // for (let i = 0; i < imagesData.length; i++) {
-  console.log("number start");
-  // let result;
-  // console.log(imagesData[0].base64.toString('base64'))
-  let features = [{ type: 'TEXT_DETECTION' }];
+//   // for (let i = 0; i < imagesData.length; i++) {
+//   console.log("number start");
+//   // let result;
+//   // console.log(imagesData[0].base64.toString('base64'))
+//   let features = [{ type: 'TEXT_DETECTION' }];
 
-  if (type === "handwriting") {
-    features = [{ type: "DOCUMENT_TEXT_DETECTION" }];
-  }
+//   if (type === "handwriting") {
+//     features = [{ type: "DOCUMENT_TEXT_DETECTION" }];
+//   }
 
   
 
-  // Build the image request object for that one image. Note: for additional images you have to create
-  // additional image request objects and store them in a list to be used below.
+//   // Build the image request object for that one image. Note: for additional images you have to create
+//   // additional image request objects and store them in a list to be used below.
 
-  const allImages = [];
-  for (let i = 0; i < fileRefs.length; i++) {
-    console.log(fileRefs[i], "File Refs")
-    console.log(features, "Feature")
-    allImages.push({
-      image: {
-        source: {
-          imageUri: fileRefs[i],
-        }
-      },
-      features: features,
-    });
-  }
-  console.log(allImages)
+//   const allImages = [];
+//   for (let i = 0; i < fileRefs.length; i++) {
+//     console.log(fileRefs[i], "File Refs")
+//     console.log(features, "Feature")
+//     allImages.push({
+//       image: {
+//         source: {
+//           imageUri: fileRefs[i],
+//         }
+//       },
+//       features: features,
+//     });
+//   }
+//   console.log(allImages)
 
-  const fullRequest = {
-    requests: allImages,
-    outputConfig: {
-      gcsDestination: {
-        uri: `gs://cac-2021.appspot.com/temp-transcripts/${uuid}/`
-      }
-    }
-  };
+//   const fullRequest = {
+//     requests: allImages,
+//     outputConfig: {
+//       gcsDestination: {
+//         uri: `gs://cac-2021.appspot.com/temp-transcripts/${uuid}/`
+//       }
+//     }
+//   };
 
-  const [operation] = await visionClient.asyncBatchAnnotateImages(fullRequest);
-  console.log("made it to operation")
+//   const [operation] = await visionClient.asyncBatchAnnotateImages(fullRequest);
+//   console.log("made it to operation")
 
-  // Wait for the operation to complete
-  const [filesResponse] = await operation.promise();
-  console.log(filesResponse)
+//   // Wait for the operation to complete
+//   const [filesResponse] = await operation.promise();
+//   console.log(filesResponse)
 
 
   // console.log(request)
@@ -94,47 +94,48 @@ const imageToTextGCP = async (fileRefs: any[], type: string, uuid: string) => {
 
   // console.log(`Full text: ${fullTextAnnotation.text}`);
   // return overallResult;
-};
+// };
 
-const refs = ["gs://cac-2021.appspot.com/temp-images/elbu8EoXeMWfJR2nts9fhBLPR9w1/image-0.jpg"]
-const uuid = "elbu8EoXeMWfJR2nts9fhBLPR9w1";
-const type = "handwritten"
+// const refs = ["gs://cac-2021.appspot.com/temp-images/elbu8EoXeMWfJR2nts9fhBLPR9w1/image-0.jpg"]
+// const uuid = "elbu8EoXeMWfJR2nts9fhBLPR9w1";
+// const type = "handwritten"
 
-imageToTextGCP(refs, type, uuid);
+// imageToTextGCP(refs, type, uuid);
 
 
-// const textToSpeech = require('@google-cloud/text-to-speech');
-// const fs = require('fs');
-// const util = require('util');
+const textToSpeech = require('@google-cloud/text-to-speech');
+const fs = require('fs');
+const util = require('util');
 
-// const client = new textToSpeech.TextToSpeechClient();
+const client = new textToSpeech.TextToSpeechClient();
 
-// /**
-//  * TODO(developer): Uncomment the following lines before running the sample.
-//  */
-// const text = 'Text to synthesize';
-// const outputFile = 'output.wav';
+/**
+ * TODO(developer): Uncomment the following lines before running the sample.
+ */
+const text = 'Text to synthesize';
+const outputFile = 'output.wav';
 
-// const maleName = "en-US-Wavenet-I";
-// const femaleName = "en-US-Wavenet-C";
+const maleName = "en-US-Wavenet-I";
+const femaleName = "en-US-Wavenet-C";
 
-// const textToSpeechFunc = async () => {
-//   const request = {
-//     input: {text: text},
-//     voice: {languageCode: 'en-US', name: maleName},
-//     audioConfig: {audioEncoding: 'LINEAR16'},
-//   };
-//   const [response] = await client.synthesizeSpeech(request);
+const textToSpeechFunc = async () => {
+  const request = {
+    input: {text: text},
+    voice: {languageCode: 'en-US', name: maleName},
+    audioConfig: {audioEncoding: 'LINEAR16'},
+  };
+  const [response] = await client.synthesizeSpeech(request);
 
-//   const writeFile = util.promisify(fs.writeFile);
-//   await writeFile(outputFile, response.audioContent, 'binary');
-//   console.log(`Audio content written to file: ${outputFile}`);
+  console.log(response.audioContent)
+  // const writeFile = util.promisify(fs.writeFile);
+  // await writeFile(outputFile, response.audioContent, 'binary');
+  // console.log(`Audio content written to file: ${outputFile}`);
   
-// }
+}
 
-// console.log("Start")
-// textToSpeechFunc();
-// console.log("End")
+console.log("Start")
+textToSpeechFunc();
+console.log("End")
 
 
 

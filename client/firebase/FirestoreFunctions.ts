@@ -28,6 +28,11 @@ export const getUserData = async (uuid: string) => {
   return data as unknown as UserTypeDB;
 };
 
+export const getAllAudioFiles = async (uuid: string) => {
+  
+}
+
+
 const handleUploadFiles = async (files: FinalImageDataType, uuid: string) => {
   if (!storage) return;
 

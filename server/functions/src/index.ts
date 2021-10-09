@@ -2,7 +2,7 @@ import * as functions from "firebase-functions";
 
 require("firebase-functions/lib/logger/compat");
 
-// import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 
 
@@ -16,8 +16,7 @@ admin.initializeApp({
 
 const storage = admin.storage().bucket();
 
-// const db = admin.firestore()
-
+const db = admin.firestore()
 
 // Start writing Firebase Functions
 // https://firebase.google.com/docs/functions/typescript
@@ -34,8 +33,6 @@ const visionClient = new vision.ImageAnnotatorClient();
 
 const imageToTextGCP = async (fileRefs: any[], type: string, uuid: string) => {
   // const overallResult: any = [];
-
-
   console.log("started");
 
   let features = [{ type: "TEXT_DETECTION" }];
@@ -84,6 +81,57 @@ const imageToTextGCP = async (fileRefs: any[], type: string, uuid: string) => {
  
 };
 
+const textToSpeechImport = require('@google-cloud/text-to-speech');
+
+const clientTTS = new textToSpeechImport.TextToSpeechClient();
+
+const mp3Duration = require('mp3-duration');
+
+const textToSpeech = async (userUuid: string, fileUuid: string, transcript: string) => {
+
+  // console.log(transcript, "tras")
+
+  const maleName = "en-US-Wavenet-I";
+  // const femaleName = "en-US-Wavenet-C";
+
+  const request = {
+    input: {text: transcript},
+    voice: {languageCode: 'en-US', name: maleName},
+    audioConfig: {audioEncoding: 'LINEAR16'},
+  };
+  const [response] = await clientTTS.synthesizeSpeech(request);
+
+
+  
+  const duration = await mp3Duration(response.audioContent);
+
+  // console.log(response)
+  const fileRef = `audio-files/${userUuid}/${fileUuid}.wav`
+  try {
+    await storage.file(fileRef).save(response.audioContent)
+  } catch (e) {
+    console.log(e)
+  }
+
+  console.log("TTS Done")
+  return {fileRef, duration};
+
+}
+
+const addDataToDB = async (userUuid: string, fileUuid: string, fileData: any, firstImageRef: string, audioFileRef: string) => {
+
+  db?.collection(`users`).doc(userUuid).collection("audio-files").doc(fileUuid).set({
+    thumbnailRef: firstImageRef,
+    header: fileData.header,
+    description: fileData.description,
+    duration: fileData.duration,
+    dateCreated: new Date().toISOString(),
+    audioFileRef: audioFileRef,
+    fileID: fileUuid,
+    transcript: fileData.transcript
+  })
+}
+
 // Part 1 Front End Call
 exports.createNewAudioFile = functions.https.onCall(async (data, context) => {
   // console.log("It worked HERE")
@@ -97,7 +145,7 @@ exports.createNewAudioFile = functions.https.onCall(async (data, context) => {
     data.uuid
   );
 
-  storage.file(jsonFileRef).download(function (err: any, contents: any) {
+  storage.file(jsonFileRef).download(async function (err: any, contents: any) {
     if (!err) {
       const jsonData = JSON.parse(contents.toString('utf8'))
       let allText = ""
@@ -109,15 +157,27 @@ exports.createNewAudioFile = functions.https.onCall(async (data, context) => {
       }
       allText.replaceAll(/[\r\n]+/gm, " ")
 
-
       // console.log("Writting to Database")
-      // const fileUuid = uuidv4();
-      // db?.collection(`users`).doc(uuid).collection("audio-files").doc(fileUuid).set({
-      //   transcript: allText,
-      // })
+      const fileUuid = uuidv4();
+      
 
       console.log(allText, "All Text")
-      
+      const TTSData = await textToSpeech(data.uuid, fileUuid, allText)
+
+      const fileData = {
+        ...data.overAllData,
+        transcript: allText,
+        duration: TTSData.duration
+      }
+      const newThumbnailFileLocation = `thumbnails/${data.uuid}/${fileUuid}.jpg`
+
+      const thumbnailUrl = await storage.file(newThumbnailFileLocation).publicUrl()
+      const audioFileUrl = await storage.file(TTSData.fileRef).publicUrl()
+      // console.log(thumbnailUrl, "Url")
+
+      await storage.file(`temp-images/${data.uuid}/image-0.jpg`).move(newThumbnailFileLocation)
+
+      await addDataToDB(data.uuid, fileUuid, fileData, thumbnailUrl, audioFileUrl)
     }
     
   });
