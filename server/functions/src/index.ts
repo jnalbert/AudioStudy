@@ -103,7 +103,7 @@ const textToSpeech = async (userUuid: string, fileUuid: string, transcript: stri
 
 
   
-  const duration = await mp3Duration(response.audioContent);
+  const duration = Math.ceil(await mp3Duration(response.audioContent))
 
   // console.log(response)
   const fileRef = `audio-files/${userUuid}/${fileUuid}.wav`
@@ -120,6 +120,9 @@ const textToSpeech = async (userUuid: string, fileUuid: string, transcript: stri
 
 const addDataToDB = async (userUuid: string, fileUuid: string, fileData: any, firstImageRef: string, audioFileRef: string) => {
 
+  const allTranscript = fileData.transcript.replaceAll(/(\r\n|\n|\r)/gm, "");
+
+
   db?.collection(`users`).doc(userUuid).collection("audio-files").doc(fileUuid).set({
     thumbnailRef: firstImageRef,
     header: fileData.header,
@@ -128,7 +131,12 @@ const addDataToDB = async (userUuid: string, fileUuid: string, fileData: any, fi
     dateCreated: new Date().toISOString(),
     audioFileRef: audioFileRef,
     fileID: fileUuid,
-    transcript: fileData.transcript
+    transcript: allTranscript
+  })
+
+  db?.collection("users").doc(userUuid).collection("profile").doc("data").update({
+    totalAudioFiles: admin.firestore.FieldValue.increment(1),
+    totalAudioFileLengthSeconds: admin.firestore.FieldValue.increment(fileData.duration)
   })
 }
 
