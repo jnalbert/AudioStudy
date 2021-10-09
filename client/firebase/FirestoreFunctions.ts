@@ -29,7 +29,8 @@ export const getUserData = async (uuid: string) => {
 };
 
 export const getAllAudioFiles = async (uuid: string) => {
-  
+  const response = await db?.collection("users").doc(uuid).collection("audio-files").get()
+  return response?.docs.map((doc: any) => doc.data());
 }
 
 

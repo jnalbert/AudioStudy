@@ -20,9 +20,7 @@ const SectionWrapper = styled.View`
 `
 
 const AudioFileThumbnail = styled.Image`
-  height: 100px;
   border-radius: 8px;
-  
 `
 
 const styles = StyleSheet.create({
@@ -36,7 +34,7 @@ const AudioThumbnailWrapper = styled.View`
   align-items: center;
   justify-content: center;
   height: 100px;
-  width: 77px;
+  width: 75px;
   border: 1px ${Text300};
   border-radius: 8px;
   overflow: hidden;
@@ -178,14 +176,13 @@ const AudioFileSection: FC<AudioFileSectionProps> = ({ imgUrl, header, descripti
     width = 0;
     padding = 0
   }
-  
-  
+    
   return (
-    <OverallWrapper style={{maxHeight: height, maxWidth: width, paddingTop: padding, paddingBottom: padding}}>
+    <OverallWrapper style={{ maxHeight: height, maxWidth: width, paddingTop: padding, paddingBottom: padding }}>
     <TouchableOpacity onPress={handlePress} >
       <SectionWrapper>
-        <AudioThumbnailWrapper>
-          <AudioFileThumbnail style={styles.image} source={require("../../../assets/TestImage1.png")} />
+          <AudioThumbnailWrapper>
+            <AudioFileThumbnail style={[styles.image, {width: 78, height: 105}]} source={{ uri: imgUrl }}/>
         </AudioThumbnailWrapper>
         <MainInfoWrapper>
           <SideBySideWrapper>

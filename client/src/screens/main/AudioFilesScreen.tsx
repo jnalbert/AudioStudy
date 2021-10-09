@@ -1,18 +1,24 @@
-import React, { FC, useState } from 'react';
-import { View, Text } from 'react-native';
-import styled from "styled-components/native"
-import ScreenWrapperComp from '../../shared/ScreenWrapperComp';
-import { backgroundGray, borderColor, Text300, Text100 } from '../../shared/color';
-import { AntDesign } from '@expo/vector-icons'; 
-import SortByOptions from '../../components/AudioFiles/SortByOptions';
-import AudioFileSection from '../../components/AudioFiles/AudioFileSection';
+import React, { FC, useEffect, useState } from "react";
+import { View, Text } from "react-native";
+import styled from "styled-components/native";
+import ScreenWrapperComp from "../../shared/ScreenWrapperComp";
+import {
+  backgroundGray,
+  Text300,
+  Text100,
+} from "../../shared/color";
+import { AntDesign } from "@expo/vector-icons";
+import SortByOptions from "../../components/AudioFiles/SortByOptions";
+import AudioFileSection from "../../components/AudioFiles/AudioFileSection";
+import { _getStoredUuid } from "../../AppContext";
+import { getAllAudioFiles } from "../../../firebase/FirestoreFunctions";
 
 const SearchBarWrapper = styled.View`
   width: 100%;
   padding-top: 15px;
   flex-direction: row;
   align-items: center;
-`
+`;
 
 const SearchBar = styled.View`
   flex: 1;
@@ -25,7 +31,7 @@ const SearchBar = styled.View`
   flex-direction: row;
   padding-right: 16px;
   align-items: center;
-`
+`;
 
 const TextInputWithStyles = styled.TextInput`
   margin-left: 14px;
@@ -39,15 +45,27 @@ const AudioFilesWrapper = styled.ScrollView`
   flex-direction: column;
   width: 100%;
   padding-top: 20px;
-`
+`;
+
+const NoAudioFilesWrapper = styled.View`
+  justify-content: center;
+  align-items: center;
+`;
+
+const NoAudioFilesText = styled.Text`
+  font-family: "Inter_400Regular";
+  color: ${Text300};
+`;
 
 interface AudioFileType {
-  imgUrl: string;
+  audioFileRef: string;
   header: string;
   description: string;
-  length: number;
-  date: Date;
-  fileId: string;
+  duration: number;
+  dateCreated: string;
+  thumbnailRef: string;
+  fileID: string;
+  transcript: string;
   display: boolean;
 }
 
@@ -55,23 +73,32 @@ interface AudioFileScreenProps {
   navigation: any;
 }
 
-const AudioFilesScreen: FC<AudioFileScreenProps> = ({navigation}) => {
+const AudioFilesScreen: FC<AudioFileScreenProps> = ({ navigation }) => {
+  // const initialAudioFiles = [{ imgUrl: "imageUrl", header: "French Revolution", description: "Text from history class relating This is more jibber japper thatn truth", length: 200, date: new Date(), fileId: "23lnfklwns", display: true },
+  //   { imgUrl: "imageUrl", header: "Checkh", description: "Text from history class relating", length: 83, date: new Date(), fileId: "lknsdflknklt5", display: true },
+  //   { imgUrl: "imageUrl", header: "Seocond", description: "Text from history class relating", length: 83, date: new Date(), fileId: "llknsdlk", display: true },
+  //   { imgUrl: "imageUrl", header: "Thrid day", description: "Text from history class relating", length: 83, date: new Date(), fileId: "8900onegonlow", display: true },
+  //   { imgUrl: "imageUrl", header: "Day thes", description: "Text from history class relating", length: 83, date: new Date(), fileId: "oijoinldg", display: true },
+  //   { imgUrl: "imageUrl", header: "Bill Ni", description: "Text from history class relating", length: 83, date: new Date(), fileId: "oiinlwe", display: true },
+  //   { imgUrl: "imageUrl", header: "Hello friend", description: "Text from history class relating", length: 83, date: new Date(), fileId: "oi23nilnlwe", display: true },
+  //   { imgUrl: "imageUrl", header: "French Revolution", description: "Text from history class relating", length: 83, date: new Date(), fileId: "090u2409ueglk", display: true },
+  //   {imgUrl: "imageUrl", header: "French Revolution", description: "Text from history class relating", length: 83, date: new Date(), fileId: "oin23jkld", display: true}
+  // ]
 
-  const initialAudioFiles = [{ imgUrl: "imageUrl", header: "French Revolution", description: "Text from history class relating This is more jibber japper thatn truth", length: 200, date: new Date(), fileId: "23lnfklwns", display: true },
-    { imgUrl: "imageUrl", header: "Checkh", description: "Text from history class relating", length: 83, date: new Date(), fileId: "lknsdflknklt5", display: true },
-    { imgUrl: "imageUrl", header: "Seocond", description: "Text from history class relating", length: 83, date: new Date(), fileId: "llknsdlk", display: true },
-    { imgUrl: "imageUrl", header: "Thrid day", description: "Text from history class relating", length: 83, date: new Date(), fileId: "8900onegonlow", display: true },
-    { imgUrl: "imageUrl", header: "Day thes", description: "Text from history class relating", length: 83, date: new Date(), fileId: "oijoinldg", display: true },
-    { imgUrl: "imageUrl", header: "Bill Ni", description: "Text from history class relating", length: 83, date: new Date(), fileId: "oiinlwe", display: true },
-    { imgUrl: "imageUrl", header: "Hello friend", description: "Text from history class relating", length: 83, date: new Date(), fileId: "oi23nilnlwe", display: true },
-    { imgUrl: "imageUrl", header: "French Revolution", description: "Text from history class relating", length: 83, date: new Date(), fileId: "090u2409ueglk", display: true },
-    {imgUrl: "imageUrl", header: "French Revolution", description: "Text from history class relating", length: 83, date: new Date(), fileId: "oin23jkld", display: true}
-  ]
-
-  const [audioFiles, setAudioFiles] = useState<AudioFileType[]>(initialAudioFiles)
+  const [audioFiles, setAudioFiles] = useState<AudioFileType[]>([]);
 
   const [reRenderState, setReRenderState] = useState(0);
 
+  const fetchAudioFiles = async () => {
+    const uuid = await _getStoredUuid();
+    const audioFiles = await getAllAudioFiles(uuid || "");
+    setAudioFiles(audioFiles as any);
+    
+  };
+
+  useEffect(() => {
+    fetchAudioFiles();
+  }, []);
 
   let searchText: string;
 
@@ -80,40 +107,38 @@ const AudioFilesScreen: FC<AudioFileScreenProps> = ({navigation}) => {
 
     setAudioFiles((prevState) => {
       for (let i = 0; i < prevState.length; i++) {
-        const header = prevState[i].header.toLowerCase()
+        const header = prevState[i].header.toLowerCase();
         if (!header.includes(searchText)) {
           prevState[i].display = false;
         } else {
           prevState[i].display = true;
         }
       }
-      return prevState
-    })
+      return prevState;
+    });
 
     setReRenderState(reRenderState + 1);
-  }
+  };
 
   const deleteItem = (id: string) => {
     setAudioFiles((prevState) => {
       for (let i = 0; i < prevState.length; i++) {
-        if (prevState[i].fileId === id) {
-          prevState.splice(i, 1)
+        if (prevState[i].fileID === id) {
+          prevState.splice(i, 1);
           return prevState;
         }
       }
       return prevState;
-    })
-    setReRenderState(reRenderState + 1)
-  }
-
+    });
+    setReRenderState(reRenderState + 1);
+  };
 
   return (
     <ScreenWrapperComp>
-       {/* <TabNavHeader title="Audio Files" /> */}
+      {/* <TabNavHeader title="Audio Files" /> */}
 
       <SearchBarWrapper>
         <SearchBar>
-
           <AntDesign name="search1" size={18} color="#86869E" />
 
           <TextInputWithStyles
@@ -121,27 +146,48 @@ const AudioFilesScreen: FC<AudioFileScreenProps> = ({navigation}) => {
             placeholderTextColor={Text300}
             onChangeText={onSearchTextChange}
           />
-        </SearchBar >
+        </SearchBar>
 
         <SortByOptions />
-
-  
       </SearchBarWrapper>
 
       <AudioFilesWrapper>
-        
-          {audioFiles.map(({imgUrl, header, description, length, date, fileId, display}: AudioFileType) => {
+        {(audioFiles.length === 0) && (
+          <NoAudioFilesWrapper>
+            <NoAudioFilesText>No Audio Files Yet</NoAudioFilesText>
+          </NoAudioFilesWrapper>
+        )}
+
+        {audioFiles.map(
+          ({
+            thumbnailRef,
+            header,
+            description,
+            duration,
+            dateCreated,
+            fileID,
+            display,
+          }: AudioFileType) => {
             if (display === false) return;
 
-            return <AudioFileSection navigation={navigation} key={fileId} imgUrl={imgUrl} header={header} description={description} length={length} date={date} fileId={fileId} deleteItemHandle={deleteItem}/>
-          })}
-          
-          
+            return (
+              <AudioFileSection
+                navigation={navigation}
+                key={fileID}
+                imgUrl={thumbnailRef}
+                header={header}
+                description={description}
+                length={duration}
+                date={new Date(dateCreated)}
+                fileId={fileID}
+                deleteItemHandle={deleteItem}
+              />
+            );
+          }
+        )}
       </AudioFilesWrapper>
-      
     </ScreenWrapperComp>
-      
-  )
-}
+  );
+};
 
-export default AudioFilesScreen
+export default AudioFilesScreen;
