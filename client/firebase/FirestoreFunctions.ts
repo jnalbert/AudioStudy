@@ -33,6 +33,19 @@ export const getAllAudioFiles = async (uuid: string) => {
   return response?.docs.map((doc: any) => doc.data());
 }
 
+export const deleteAudioFile = async (userUuid: string, fileUuid: string) => {
+
+  // console.log(userUuid, "user Id")
+  // console.log(fileUuid, "file Id")
+  await db?.collection("users").doc(userUuid).collection("audio-files").doc(fileUuid).delete()
+  // console.log("Document deleted")
+  await storage?.ref(`/thumbnails/${userUuid}/${fileUuid}.jpg`).delete()
+  // console.log("Thumbnail deleted")
+  await storage?.ref(`/audio-files/${userUuid}/${fileUuid}.wav`).delete()
+  // console.log("Audio File deleted")
+
+}
+
 
 const handleUploadFiles = async (files: FinalImageDataType, uuid: string) => {
   if (!storage) return;
