@@ -1,4 +1,5 @@
 import * as FileSystem from "expo-file-system";
+import firebase from "firebase";
 import { Platform } from "react-native";
 import { db, functions, storage } from "../config/firebase";
 import { FinalImageDataType } from "../src/screens/main/CreateAudioFileScreen";
@@ -33,10 +34,15 @@ export const getAllAudioFiles = async (uuid: string) => {
   return response?.docs.map((doc: any) => doc.data());
 }
 
-export const deleteAudioFile = async (userUuid: string, fileUuid: string) => {
+export const deleteAudioFile = async (userUuid: string, fileUuid: string, fileLength: number) => {
 
   // console.log(userUuid, "user Id")
   // console.log(fileUuid, "file Id")
+  console.log(fileLength, "file Length")
+  await db?.collection("users").doc(userUuid).collection("profile").doc("data").update({
+    totalAudioFileLengthSeconds: firebase.firestore.FieldValue.increment(-fileLength),
+    totalAudioFiles: firebase.firestore.FieldValue.increment(-1)
+  })
   await db?.collection("users").doc(userUuid).collection("audio-files").doc(fileUuid).delete()
   // console.log("Document deleted")
   await storage?.ref(`/thumbnails/${userUuid}/${fileUuid}.jpg`).delete()

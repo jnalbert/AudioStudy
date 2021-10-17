@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, RefreshControl } from "react-native";
 import styled from "styled-components/native";
 import ScreenWrapperComp from "../../shared/ScreenWrapperComp";
 import {
@@ -11,7 +11,7 @@ import { AntDesign } from "@expo/vector-icons";
 import SortByOptions from "../../components/AudioFiles/SortByOptions";
 import AudioFileSection from "../../components/AudioFiles/AudioFileSection";
 import { _getStoredUuid } from "../../AppContext";
-import { getAllAudioFiles } from "../../../firebase/FirestoreFunctions";
+import { deleteAudioFile, getAllAudioFiles } from "../../../firebase/FirestoreFunctions";
 
 const SearchBarWrapper = styled.View`
   width: 100%;
@@ -88,12 +88,14 @@ const AudioFilesScreen: FC<AudioFileScreenProps> = ({ navigation }) => {
   const [audioFiles, setAudioFiles] = useState<AudioFileType[]>([]);
 
   const [reRenderState, setReRenderState] = useState(0);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const fetchAudioFiles = async () => {
+    setIsRefreshing(true)
     const uuid = await _getStoredUuid();
     const audioFiles = await getAllAudioFiles(uuid || "");
     setAudioFiles(audioFiles as any);
-
+    setIsRefreshing(false)
   };
 
   useEffect(() => {
@@ -120,7 +122,7 @@ const AudioFilesScreen: FC<AudioFileScreenProps> = ({ navigation }) => {
     setReRenderState(reRenderState + 1);
   };
 
-  const deleteItem = (id: string) => {
+  const deleteItem = async (id: string, length: number) => {
     setAudioFiles((prevState) => {
       for (let i = 0; i < prevState.length; i++) {
         if (prevState[i].fileID === id) {
@@ -131,7 +133,16 @@ const AudioFilesScreen: FC<AudioFileScreenProps> = ({ navigation }) => {
       return prevState;
     });
     setReRenderState(reRenderState + 1);
+
+    console.log(id, "File Id")
+    const userUuid = await _getStoredUuid();
+    await deleteAudioFile(userUuid as string, id, length)
+    console.log("Audio File deleted")
   };
+
+  const onRefresh = async () => {
+    await fetchAudioFiles()
+  }
 
   return (
     <ScreenWrapperComp>
@@ -151,7 +162,14 @@ const AudioFilesScreen: FC<AudioFileScreenProps> = ({ navigation }) => {
         <SortByOptions />
       </SearchBarWrapper>
 
-      <AudioFilesWrapper>
+      <AudioFilesWrapper
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={onRefresh}
+          />
+        }
+      >
         {(audioFiles.length === 0) && (
           <NoAudioFilesWrapper>
             <NoAudioFilesText>No Audio Files Yet</NoAudioFilesText>

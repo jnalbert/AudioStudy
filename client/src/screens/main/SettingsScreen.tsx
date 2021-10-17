@@ -1,5 +1,5 @@
 import React, { FC, useContext, useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import styled from "styled-components/native"
 import { getUserData } from '../../../firebase/FirestoreFunctions';
@@ -80,10 +80,11 @@ interface SettingsScreenProps {
 const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   const [userInfo, setUserInfo] = useState<UserInfoType>({ name: "", email: "", dateCreated: "", audioFilesCreated: 0, totalLengthOfFiles: "" })
   const [initials, setInitials] = useState({ firstInitial: "", lastInitial: "" })
+  const [isRefreshing, setIsRefreshing] = useState(false);
   
   const fetchInitialData = async () => {
     // get data from api
-  
+    setIsRefreshing(true);
     const uuid = await _getStoredUuid();
     console.log(uuid, "stored")
     const { name, dateJoined, totalAudioFileLengthSeconds, totalAudioFiles, email } = await getUserData(uuid || "");
@@ -94,6 +95,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     const lengthOfFilesFormatted = getFormattedFilesLength(totalAudioFileLengthSeconds)
     setUserInfo({ name: name, email: email, dateCreated: newDate, audioFilesCreated: totalAudioFiles, totalLengthOfFiles: lengthOfFilesFormatted })
     getThumbnailInitials(name);
+    setIsRefreshing(false)
   }
 
   const { signOut } = useContext(AuthContext);
@@ -138,7 +140,9 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     navigation.navigate("ChangePassword")
   }
 
-  
+  const onRefresh = async () => {
+    await fetchInitialData()
+  }
 
   const handleLogout = () => {
     console.log(signOut())
@@ -146,7 +150,13 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
 
   return (
     <ScreenWrapperComp>
-      <ScrollView>
+      <ScrollView 
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={onRefresh}
+      />}
+       >
         <Thumbnail>
         <ThumbnailLetter>
             {initials.firstInitial}
