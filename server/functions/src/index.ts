@@ -97,16 +97,19 @@ const textToSpeech = async (userUuid: string, fileUuid: string, transcript: stri
   const request = {
     input: {text: transcript},
     voice: {languageCode: 'en-US', name: maleName},
-    audioConfig: {audioEncoding: 'LINEAR16'},
+    audioConfig: {audioEncoding: 'MP3'},
   };
+  console.log("HERE 2")
+
   const [response] = await clientTTS.synthesizeSpeech(request);
 
 
+  console.log("HERE 1")
   
   const duration = Math.ceil(await mp3Duration(response.audioContent))
 
   // console.log(response)
-  const fileRef = `audio-files/${userUuid}/${fileUuid}.wav`
+  const fileRef = `audio-files/${userUuid}/${fileUuid}.mp3`
   try {
     await storage.file(fileRef).save(response.audioContent)
   } catch (e) {

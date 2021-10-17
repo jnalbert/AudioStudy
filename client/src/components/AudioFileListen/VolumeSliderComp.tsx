@@ -27,7 +27,7 @@ interface VolumeSliderComp {
 
 const VolumeSliderComp: FC<VolumeSliderComp> = ({soundPlayer}) => {
 
-  const [volume, setVolume] = useState(0)
+  const [volume, setVolume] = useState(0.41)
 
   const roundValue = (value: number) => {
     return parseFloat(value.toFixed(2))

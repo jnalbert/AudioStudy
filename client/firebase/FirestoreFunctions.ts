@@ -47,7 +47,7 @@ export const deleteAudioFile = async (userUuid: string, fileUuid: string, fileLe
   // console.log("Document deleted")
   await storage?.ref(`/thumbnails/${userUuid}/${fileUuid}.jpg`).delete()
   // console.log("Thumbnail deleted")
-  await storage?.ref(`/audio-files/${userUuid}/${fileUuid}.wav`).delete()
+  await storage?.ref(`/audio-files/${userUuid}/${fileUuid}.mp3`).delete()
   // console.log("Audio File deleted")
 
 }
