@@ -38,7 +38,7 @@ const imageToTextGCP = async (fileRefs: any[], type: string, uuid: string) => {
   let features = [{ type: "TEXT_DETECTION" }];
 
   if (type === "Handwritten") {
-    console.log("HandWritten NOtes")
+    console.log("HandWritten Notes")
     features = [{ type: "DOCUMENT_TEXT_DETECTION" }];
   }
 
@@ -99,12 +99,12 @@ const textToSpeech = async (userUuid: string, fileUuid: string, transcript: stri
     voice: {languageCode: 'en-US', name: maleName},
     audioConfig: {audioEncoding: 'MP3'},
   };
-  console.log("HERE 2")
+  // console.log("HERE 2")
 
   const [response] = await clientTTS.synthesizeSpeech(request);
 
 
-  console.log("HERE 1")
+  // console.log("HERE 1")
   
   const duration = Math.ceil(await mp3Duration(response.audioContent))
 
