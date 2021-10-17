@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 // The Firebase Admin SDK to access Firestore.
 const admin = require("firebase-admin");
-const serviceAccount = require("/Users/justinalbert/Code_Projects/ReactNativeApps/AudioStudy/server/functions/cac-2021-firebase-adminsdk-1eie4-7f277e5b8a.json");
+const serviceAccount = require("./cac-2021-firebase-adminsdk-1eie4-7f277e5b8a.json");
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   storageBucket: 'gs://cac-2021.appspot.com/'
@@ -169,7 +169,7 @@ exports.createNewAudioFile = functions.https.onCall(async (data, context) => {
       const fileUuid = uuidv4();
       
 
-      console.log(allText, "All Text")
+      // console.log(allText, "All Text")
       const TTSData = await textToSpeech(data.uuid, fileUuid, allText)
 
       const fileData = {
@@ -186,6 +186,8 @@ exports.createNewAudioFile = functions.https.onCall(async (data, context) => {
       await storage.file(`temp-images/${data.uuid}/image-0.jpg`).move(newThumbnailFileLocation)
 
       await addDataToDB(data.uuid, fileUuid, fileData, thumbnailUrl, audioFileUrl)
+
+      console.log("Cloud function out *Drops mic*")
     }
     
   });

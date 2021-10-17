@@ -55,7 +55,7 @@ const AudioFileListenScreen: FC<AudioFileListenScreen> = ({ route }) => {
   const [isBuffering, setIsBuffering] = useState(false);
 
   
-  const { imgUrl, header, description, length, fileId } = route.params;
+  const { imgUrl, header, description, length, fileId, audioFileRef, transcript } = route.params;
   const [duration, setDuration] = useState(length);
 
   const rounder = (value: number) => {
@@ -121,13 +121,15 @@ const AudioFileListenScreen: FC<AudioFileListenScreen> = ({ route }) => {
 
   const loadSound = async () => {
     console.log('Loading Sound');
+    // console.log(audioFileRef)
     await sound.current.loadAsync(
-      { uri: "http://russprince.com/hobbies/files/13%20Beethoven%20-%20Fur%20Elise.mp3" },
+      { uri: audioFileRef },
       { progressUpdateIntervalMillis: 100 }
     );
     // const { sound } = await Audio.Sound.createAsync(
     //   { uri: "http://russprince.com/hobbies/files/13%20Beethoven%20-%20Fur%20Elise.mp3" },
     //   {progressUpdateIntervalMillis: 100},
+    
     // );
 
   }

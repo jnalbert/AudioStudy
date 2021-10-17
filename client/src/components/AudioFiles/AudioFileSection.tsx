@@ -119,11 +119,13 @@ interface AudioFileSectionProps {
   length: number;
   date: Date;
   fileId: string;
+  transcript: string;
+  audioFileRef: string;
   deleteItemHandle: (id: string) => void;
   navigation: any;
 }
 
-const AudioFileSection: FC<AudioFileSectionProps> = ({ imgUrl, header, description, length, date, fileId, deleteItemHandle, navigation }) => {
+const AudioFileSection: FC<AudioFileSectionProps> = ({ imgUrl, header, description, length, date, fileId, deleteItemHandle, navigation, audioFileRef, transcript }) => {
 
 
   const [display, setDisplay] = useState(true);
@@ -135,7 +137,9 @@ const AudioFileSection: FC<AudioFileSectionProps> = ({ imgUrl, header, descripti
         header: header,
         description: description,
         length: length,
-        fileId: fileId
+      fileId: fileId,
+      audioFileRef: audioFileRef,
+        transcript: transcript
     });
 
   }
@@ -188,7 +192,7 @@ const AudioFileSection: FC<AudioFileSectionProps> = ({ imgUrl, header, descripti
           <SideBySideWrapper>
 
             <LeftContainer>
-              <HeaderText>
+              <HeaderText numberOfLines={1}>
                 {header}
               </HeaderText>
             </LeftContainer>

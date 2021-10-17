@@ -93,7 +93,7 @@ const AudioFilesScreen: FC<AudioFileScreenProps> = ({ navigation }) => {
     const uuid = await _getStoredUuid();
     const audioFiles = await getAllAudioFiles(uuid || "");
     setAudioFiles(audioFiles as any);
-    
+
   };
 
   useEffect(() => {
@@ -167,6 +167,8 @@ const AudioFilesScreen: FC<AudioFileScreenProps> = ({ navigation }) => {
             dateCreated,
             fileID,
             display,
+            transcript,
+            audioFileRef
           }: AudioFileType) => {
             if (display === false) return;
 
@@ -181,6 +183,8 @@ const AudioFilesScreen: FC<AudioFileScreenProps> = ({ navigation }) => {
                 date={new Date(dateCreated)}
                 fileId={fileID}
                 deleteItemHandle={deleteItem}
+                transcript={transcript}
+                audioFileRef={audioFileRef}
               />
             );
           }

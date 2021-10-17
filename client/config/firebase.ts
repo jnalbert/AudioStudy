@@ -32,5 +32,5 @@ export const FirebaseAll = Firebase
 export const Auth = Firebase?.auth();
 export const db = Firebase?.firestore()
 export const storage = Firebase?.storage()
-Firebase?.functions().useEmulator("192.168.1.74", 5000);
+// Firebase?.functions().useEmulator("192.168.1.74", 5000);
 export const functions = Firebase?.functions();

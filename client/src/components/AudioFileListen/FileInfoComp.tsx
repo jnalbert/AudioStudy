@@ -13,14 +13,13 @@ const FileImageWrapper = styled.View`
   align-items: center;
   justify-content: center;
   height: 277px;
-  width: 213px;
+  width: 209px;
   border: 1px ${Text300};
   border-radius: 8px;
   overflow: hidden;
 `
 
 const FileImage = styled.Image`
-  height: 277px;
   border-radius: 8px; 
 `
 
@@ -61,7 +60,7 @@ const FileInfoComp: FC<FileInfoCompProps> = ({imgData, header, description}) => 
     <>
     <FileImageContainer>
         <FileImageWrapper>
-          <FileImage style={{ flex: 1, resizeMode: "contain" }} source={require("../../../assets/TestImage1.png")} />
+          <FileImage style={{ flex: 1, resizeMode: "contain", height: 277, width: 215 }} source={{uri: imgData}} />
         </FileImageWrapper>
       </FileImageContainer>
 
