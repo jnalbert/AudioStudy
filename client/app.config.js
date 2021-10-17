@@ -2,11 +2,11 @@ import 'dotenv/config';
 
 export default {
   expo: {
-    name: "audioStudy",
-    slug: "audioStudy",
+    name: "Audio Study",
+    slug: "audiostudy",
     version: "1.0.0",
     orientation: "portrait",
-    icon: "./assets/icon.png",
+    icon: "./assets/AppLogoSquare.png",
     splash: {
      image: "./assets/FullLogo.png",
       resizeMode: "contain",
