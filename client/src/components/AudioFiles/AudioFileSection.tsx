@@ -134,14 +134,16 @@ const AudioFileSection: FC<AudioFileSectionProps> = ({
   const [display, setDisplay] = useState(true);
 
   const handlePress = () => {
-    navigation.navigate("AudioFileListen", {
-      imgUrl: imgUrl,
-      header: header,
-      description: description,
-      length: length,
-      fileId: fileId,
-      audioFileRef: audioFileRef,
-      transcript: transcript,
+    navigation.navigate("AudioFileListenNav", {
+      screen: "AudioFilesListen", params: {
+        imgUrl: imgUrl,
+        header: header,
+        description: description,
+        length: length,
+        fileId: fileId,
+        audioFileRef: audioFileRef,
+        transcript: transcript
+      }
     });
   };
 

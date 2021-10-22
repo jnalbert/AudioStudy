@@ -6,11 +6,11 @@ import { backgroundColor } from "../shared/color";
 import StackHeaderBackButton from "../shared/StackHeader/StackHeaderBackButton";
 import AudioFilesScreen from '../screens/main/AudioFilesScreen';
 import AudioFileListenScreen from '../screens/main/AudioFileListenScreen';
-import AudioFileListenNavigator from './AudioFileListenNavigator';
+import TranscriptScreen from '../screens/main/TranscriptScreen';
 
 const Stack = createStackNavigator();
 
-const AudioFilesNavigator: FC = () => {
+const AudioFileListenNavigator: FC = () => {
   return (
     <Stack.Navigator screenOptions={{
       headerStyle: { backgroundColor: backgroundColor, borderBottomColor: backgroundColor, shadowColor: 'transparent' },
@@ -20,15 +20,15 @@ const AudioFilesNavigator: FC = () => {
        
 
       <Stack.Screen
-        name="AudioFiles"
-        component={AudioFilesScreen}
-        options={{ headerTitle: () => <StackHeader name="Audio Files" />, headerShown: true }}
+        name="AudioFilesListen"
+        component={AudioFileListenScreen}
+        options={{ headerTitle: () => <StackHeader name="" />, headerShown: true }}
       />
 
       <Stack.Screen
-        name="AudioFileListenNav"
-        component={AudioFileListenNavigator}
-        options={{ headerShown: false }}
+        name="Transcript"
+        component={TranscriptScreen}
+        options={{ headerTitle: () => <StackHeader name="Transcript" />, headerShown: true }}
       />
 
   
@@ -39,4 +39,4 @@ const AudioFilesNavigator: FC = () => {
   )
 }
 
-export default AudioFilesNavigator
+export default AudioFileListenNavigator

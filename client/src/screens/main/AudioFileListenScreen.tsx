@@ -45,7 +45,7 @@ interface AudioPlaybackStatus {
     didJustFinish: boolean;
 };
 
-const AudioFileListenScreen: FC<AudioFileListenScreen> = ({ route }) => {
+const AudioFileListenScreen: FC<AudioFileListenScreen> = ({ route, navigation }) => {
 
   const [isShowCaptions, setIsShowCaptions] = useState(false);
   
@@ -56,6 +56,9 @@ const AudioFileListenScreen: FC<AudioFileListenScreen> = ({ route }) => {
 
   
   const { imgUrl, header, description, length, fileId, audioFileRef, transcript } = route.params;
+
+  
+
   const [duration, setDuration] = useState(length);
 
   const rounder = (value: number) => {
@@ -188,6 +191,11 @@ const AudioFileListenScreen: FC<AudioFileListenScreen> = ({ route }) => {
       : undefined;
   }, [sound]);
 
+  const captionsClick = () => {
+    navigation.navigate("Transcript", {
+        transcript: transcript
+    });
+  }
 
   return (
     <ScreenWrapperComp>
@@ -197,7 +205,7 @@ const AudioFileListenScreen: FC<AudioFileListenScreen> = ({ route }) => {
       <VolumeSliderComp soundPlayer={sound.current} />
 
       <ClosedCaptionsWrapper>
-        <TouchableOpacity onPress={() => setIsShowCaptions(!isShowCaptions)}>
+        <TouchableOpacity onPress={captionsClick}>
           <MaterialCommunityIcons name="closed-caption" size={26} color={Primary} />
         </TouchableOpacity>
       </ClosedCaptionsWrapper>

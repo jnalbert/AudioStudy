@@ -17,7 +17,7 @@ import { AuthContext } from '../AppContext';
 const displayTabs = (route: any) => {
   const routeName = getFocusedRouteNameFromRoute(route);
 
-  if (routeName === "AudioFileListen") return false;
+  if (routeName === "AudioFileListenNav") return false;
 
   return true;
 }
