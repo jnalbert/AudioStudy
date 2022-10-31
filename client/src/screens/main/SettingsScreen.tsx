@@ -30,6 +30,12 @@ const ThumbnailLetter = styled.Text`
   padding-left: 2px;
   padding-right: 2px;
 `
+const TextWrap = styled.View`
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  margin: 0px 0px;
+`
 
 const ProfileHeaderWrapper = styled.View`
   flex-direction: column;
@@ -148,6 +154,10 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     console.log(signOut())
   }
 
+  const handleDeletion = () => {
+    navigation.navigate("DeleteScreen")
+  }
+
   return (
     <ScreenWrapperComp>
       <ScrollView 
@@ -182,6 +192,8 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
         </ChangePasswordWrapper>
         <LogoutButtonWrapper>
           <BasicButton style={{backgroundColor: "transparent", borderColor: logoutRed, borderWidth: 2}} buttonTextStyle={{color: logoutRed}} title="Logout" onPress={handleLogout} />
+          <BasicButton style={{backgroundColor: "gray", borderColor: logoutRed, borderWidth: 2}} buttonTextStyle={{color: logoutRed}} title="Delete Account" onPress={handleDeletion} />
+
         </LogoutButtonWrapper>
       </ScrollView>
     </ScreenWrapperComp>

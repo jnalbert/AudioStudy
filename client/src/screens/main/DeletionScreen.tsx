@@ -7,7 +7,7 @@ import ScreenWrapperComp from '../../shared/ScreenWrapperComp';
 import styled from 'styled-components/native';
 
 
-interface IntroScreenProps {
+interface DeletionProp {
   navigation: any
 }
 
@@ -26,9 +26,14 @@ const TextWrap = styled.View`
 `
 
 
-const IntroScreen: FC<IntroScreenProps> = ({ navigation }) => {
+const DeletionScreen: FC<DeletionProp> = ({ navigation }) => {
 
-  
+    const deleteAccount = () => {
+        navigation.navigate("Settings")
+        /*   add deletion code idk 
+        just make sure that they see that their name has been wiped off
+        */
+      }
   return (
     <TextWrap>
       <ScrollView>
@@ -36,24 +41,13 @@ const IntroScreen: FC<IntroScreenProps> = ({ navigation }) => {
           <HeaderImage style={ styles.image} resizeMethod="resize" source={ require("../../../assets/FullLogo.png")}/>
         </ImageWrapper>
         <Header3>
-          Improve the effectiveness of studying through audio
+        Are you sure you want to permanently delete your account? This action cannot be reversed. All files and progress will be lost.  
         </Header3>
-        <Header2Light>
-          There is no need to read long laborious texts anymore
-        </Header2Light>
-        <ImageWrapper2>
-          <Image style={ styles.image} source={require("../../../assets/TextBookCrossedOut.jpeg")} />
-        </ImageWrapper2>
        
-        <Header3Second>
-          You can simply just take a picture and have it read to you
-        </Header3Second>
-
         <AuthButtonsWrapper>
 
-          <BasicButton onPress={() => navigation.navigate("Sign Up")} title="Sign Up" />
-            <BasicButton onPress={() => navigation.navigate("Login")} title="Login" />
-            <BasicButton onPress={() => navigation.navigate("Guest")} title="Guest" />
+          <BasicButton onPress={() => navigation.navigate("Settings")} title="No :)" />
+            <BasicButton onPress={deleteAccount} title="Yes :(" />
 
         </AuthButtonsWrapper>
         </ScrollView>
@@ -61,4 +55,4 @@ const IntroScreen: FC<IntroScreenProps> = ({ navigation }) => {
   )
 }
 
-export default IntroScreen
+export default DeletionScreen

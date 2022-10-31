@@ -11,7 +11,12 @@ import { AuthContext } from '../../AppContext';
 const InputWrapper = styled.View`
   padding-top: 50px
 `
-
+const TextWrap = styled.View`
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  margin: 0px 0px;
+`
 const ButtonWrapper = styled.View`
   padding-top: 80px;
 `
@@ -40,7 +45,7 @@ const SignUpScreen: FC = () => {
   }
 
   return (
-    <ScreenWrapperComp>
+    <TextWrap>
 
         <InputWrapper>
           <StyledTextInput hideText={false} error={errors.name} rules={{required: "This field is required"}} control={ control} placeHolderText="Name" name="name"/>
@@ -52,7 +57,7 @@ const SignUpScreen: FC = () => {
           <BasicButton title="Sign Up" onPress={handleSubmit(onSubmit)}/>
         </ButtonWrapper>
 
-    </ScreenWrapperComp>
+    </TextWrap>
   )
 }
 

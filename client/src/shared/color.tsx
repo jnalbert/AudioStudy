@@ -20,4 +20,25 @@ export const borderColor = "#E7ECF3"
 
 export const logoutRed = "#F85149"
 
+export const Pink = "#FF70A0"
+
+export const Teal = "#53CACA"
+
+export const YellowFor = "#FFF799"
+
+export const GreenFor = "#9DE7B3"
+
+export const Purple = "#E0C0FF"
+
+export const Black = "#181D2D"
+
+
+export const Poppins = "Poppins"
+
+export const SourceSerif = "SourceSerif"
+
+export const Nunito = "Nunito"
+
+
+
 

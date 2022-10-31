@@ -22,7 +22,12 @@ const ForgotPasswordText = styled.Text`
   font-family: "Inter_500Medium";
   font-size: 16px;
 `
-
+const TextWrap = styled.View`
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  margin: 0px 0px;
+`
 const ForgotPasswordWrapper = styled.TouchableOpacity`
   padding-top: 4px;
 `
@@ -56,7 +61,7 @@ const LoginScreen: FC = () => {
   }
 
   return (
-    <ScreenWrapperComp>
+    <TextWrap>
       <InputWrapper>
         <StyledTextInput
           hideText={false}
@@ -86,7 +91,7 @@ const LoginScreen: FC = () => {
         <ForgotPasswordText>Forgot your password?</ForgotPasswordText>
       </ForgotPasswordWrapper>
       
-    </ScreenWrapperComp>
+    </TextWrap>
   );
 };
 

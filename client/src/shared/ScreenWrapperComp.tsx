@@ -1,7 +1,9 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { View } from 'react-native';
 import styled from "styled-components/native"
 import { backgroundColor } from './color';
+import IsProtectedComp from "./IsProtectedComp";
+
 
 const ScreenWrapper = styled.View`
   flex: 1;
@@ -19,17 +21,42 @@ const ScreenBackgroundColor = styled.View`
 
 interface ScreenWrapperCompProps {
   children: React.ReactNode;
+  isScreenProtected?: boolean;
+
 }
 
-const ScreenWrapperComp: FC<ScreenWrapperCompProps> = ({children}) => {
+const ScreenWrapperComp: FC<ScreenWrapperCompProps> = ({children, isScreenProtected}) => {
+  const [isProtected, setIsProtected] = useState(false);
+  //just left this in here
+  function isAnonymous(){
+    return true;
+  }
+  const checkUser = async () => {
+    const isAnonymousRes = await isAnonymous();
+    setIsProtected(isAnonymousRes as any);
+  }
+
+  if (isScreenProtected) {
+    checkUser()
+  }
+
+
   return (
-    <ScreenBackgroundColor>
-      <ScreenWrapper>
-        {children}
-      </ScreenWrapper>
-    </ScreenBackgroundColor>
-      
-  )
+  <ScreenBackgroundColor>
+      {!isProtected ? (
+          <IsProtectedComp navigation={undefined}/>  
+
+      ): (   
+
+        <ScreenWrapper>
+      {children}
+        </ScreenWrapper> 
+
+      )
+
 }
+</ScreenBackgroundColor>
+  );
+};
 
 export default ScreenWrapperComp

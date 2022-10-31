@@ -198,6 +198,7 @@ const AudioFileListenScreen: FC<AudioFileListenScreen> = ({ route, navigation })
   }
 
   return (
+
     <ScreenWrapperComp>
       <FileInfoComp imgData={imgUrl} header={header} description={description} />
       <AudioSeeker onValueChange={onValueChange} onSeekStart={onSeekStart} onSeekComplete={onSeekComplete} fileLengthSeconds={duration} currentPositionSeconds={ currentPosition}/>
@@ -211,6 +212,7 @@ const AudioFileListenScreen: FC<AudioFileListenScreen> = ({ route, navigation })
       </ClosedCaptionsWrapper>
       
     </ScreenWrapperComp>
+  
   )
 }
 

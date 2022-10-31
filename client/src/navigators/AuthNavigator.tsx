@@ -8,6 +8,8 @@ import StackHeader from "../shared/StackHeader/StackHeader";
 import { backgroundColor } from "../shared/color";
 import StackHeaderBackButton from "../shared/StackHeader/StackHeaderBackButton";
 import SignUpScreen from '../screens/auth/SignUpScreen';
+import ChangePasswordScreen from "../screens/main/ChangePasswordScreen";
+import MainNavigator from "./MainNavigator";
 
 
 
@@ -41,9 +43,16 @@ const AuthNavigator: FC = () => {
             component={LoginScreen}
             options={{ headerTitle: () => <StackHeader name="Login" /> }}
         />
-        
-        
+          <Stack.Screen
+            name="Guest"
+            component={MainNavigator}
+            options={({ navigation }) => ({
+              headerBackImage: () => { return ;},
+
+            })}
+        />
         </Stack.Navigator>
+    
       );
   
 };
